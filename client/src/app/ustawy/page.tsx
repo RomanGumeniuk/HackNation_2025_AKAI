@@ -88,11 +88,22 @@ export default function Ustawy() {
     setCurrentPage(1);
   };
 
-  const handleNewsletterSubscribe = (lawName: string) => {
+  const handleNewsletterSubscribe = (lawId: string, lawName: string) => {
     if (!newsletterEmail || !newsletterEmail.includes('@')) {
       toast.error('Proszę podać prawidłowy adres email');
       return;
     }
+    
+    const newSubscribedLaws = new Set(subscribedLaws);
+    newSubscribedLaws.add(lawId);
+    setSubscribedLaws(newSubscribedLaws);
+
+    const expiryDate = new Date();
+    expiryDate.setMinutes(expiryDate.getMinutes() + 30);
+    
+    const subscribedLawsArray = Array.from(newSubscribedLaws);
+    document.cookie = `subscribedLaws=${encodeURIComponent(subscribedLawsArray.join(','))}; expires=${expiryDate.toUTCString()}; path=/`;
+
     toast.success(`Zapisano na newsletter dla "${lawName}"`);
     setNewsletterEmail('');
     setSelectedLawId(null);
@@ -420,7 +431,11 @@ export default function Ustawy() {
                         >
                           <PopoverTrigger asChild>
                             <Button variant="ghost" size="icon">
-                              <Bookmark size={20} />
+                              {subscribedLaws.has(ustawy.id) ? (
+                                <BookmarkCheck size={20} className="fill-current text-blue-600" />
+                              ) : (
+                                <Bookmark size={20} />
+                              )}
                             </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-80">
@@ -447,14 +462,14 @@ export default function Ustawy() {
                                   className="flex-1 text-sm"
                                   onKeyPress={(e) => {
                                     if (e.key === 'Enter') {
-                                      handleNewsletterSubscribe(ustawy.name);
+                                      handleNewsletterSubscribe(ustawy.id, ustawy.name);
                                     }
                                   }}
                                 />
                               </div>
                               <Button
                                 onClick={() =>
-                                  handleNewsletterSubscribe(ustawy.name)
+                                  handleNewsletterSubscribe(ustawy.id, ustawy.name)
                                 }
                                 className="w-full"
                                 size="sm"
