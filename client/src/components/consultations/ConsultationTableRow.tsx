@@ -4,9 +4,10 @@ import { Consultation } from '@/mock_data/consultations';
 
 function getStatusBadgeClassName(status: string): string {
   const statusMap: Record<string, string> = {
-    'Prekonsultacje': 'bg-purple-50 text-purple-700 border-purple-300',
-    'W trakcie konsultacji': 'bg-green-50 text-green-700 border-green-300',
-    'Opiniowanie': 'bg-yellow-50 text-yellow-700 border-yellow-300',
+    'Prekonsultacje': 'bg-blue-50 text-blue-700 border-blue-300',
+    'W trakcie konsultacji': 'bg-emerald-50 text-emerald-700 border-emerald-300',
+    'Opiniowanie': 'bg-amber-50 text-amber-700 border-amber-300',
+    'Zakończone': 'bg-gray-50 text-gray-600 border-gray-300',
   };
   return statusMap[status] || 'bg-gray-50 text-gray-700 border-gray-300';
 }
@@ -17,21 +18,21 @@ export function ConsultationTableRow({ consultation }: { consultation: Consultat
     : null;
 
   return (
-    <TableRow className="hover:bg-gray-50">
+    <TableRow className="hover:bg-gray-50/50 transition-colors border-b border-gray-200">
       <TableCell>
         {externalLink ? (
           <a
             href={externalLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-900 hover:text-indigo-700 hover:underline font-medium"
+            className="text-gray-900 hover:text-[#394788] hover:underline font-medium text-sm"
           >
             {consultation.title}
           </a>
         ) : (
           <a
             href={`/konsultacje/${consultation.id}`}
-            className="text-gray-900 hover:text-indigo-700 hover:underline font-medium"
+            className="text-gray-900 hover:text-[#394788] hover:underline font-medium text-sm"
           >
             {consultation.title}
           </a>

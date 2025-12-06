@@ -30,7 +30,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ustawy/table';
+} from '@/components/ui/table';
 import { lawsData } from '@/mock_data/laws';
 
 export default function Ustawy() {
