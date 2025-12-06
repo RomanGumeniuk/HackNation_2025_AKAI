@@ -65,16 +65,14 @@ const lightTheme: Theme = {
 };
 
 export default function Graph() {
+    const node_infos = [
+        
+    ] 
     return (
-        // Added a border/bg to this container just so you can verify the transparency works 
-        // (The grid pattern or color behind this div will show through)
         <div className='h-[400px] w-full relative border border-gray-200 rounded-lg'>
             <GraphCanvas
-                // 1. Set the Theme to transparent
+                
                 theme={lightTheme}
-
-                // 2. Set Layout to hierarchical (dagre) if you want a clear "Timeline" view
-                // 'lr' = Left to Right, 'td' = Top to Down
                 layoutType="treeLr2d"
 
                 labelType='all'

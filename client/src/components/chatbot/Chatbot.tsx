@@ -6,7 +6,7 @@ import ChatbotWindow from "@/components/chatbot/ChatbotWindow";
 
 export default function Chatbot() {
 
-    const [windowClosed, setWindowsClosed] = useState<boolean>(false);
+    const [windowClosed, setWindowsClosed] = useState<boolean>(true);
 
     const openChatWindow = () => {
         setWindowsClosed(true);
