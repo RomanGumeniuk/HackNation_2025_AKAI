@@ -83,7 +83,7 @@ export default function page() {
 
       {/* Footer section */}
       <Separator />
-      <h2 className="text-lg font-semibold">Planowane konsultacje w twoim rejonie</h2>
+      <h2 className="text-lg font-semibold">Planowane konsultacje w twoim rejonie dot tej ustawy</h2>
       <div className='grid grid-cols-2 gap-8'>
         <Background>
           Lista najblizszych
