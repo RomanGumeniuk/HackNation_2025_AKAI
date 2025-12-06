@@ -91,7 +91,7 @@ export default function Graph() {
                     {
                         id: 'law-final',
                         label: 'Final Resolution (Adopted)',
-                        fill: '#2F855A', // Green for passed laws
+                        fill: '#2F855A',
                         size: 30
                     },
                 ]}

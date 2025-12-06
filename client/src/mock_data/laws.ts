@@ -8,6 +8,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty założeń projektów ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Warszawa',
+    locationCode: 'WAW',
     tags: [
       { name: 'Bezpieczeństwo', variant: 'secondary' },
       { name: 'Dzieci', variant: 'outline' },
@@ -31,6 +33,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Warszawa',
+    locationCode: 'WAW',
     tags: [
       { name: 'Bezpieczeństwo', variant: 'destructive' },
       { name: 'Prywatność', variant: 'default' },
@@ -54,6 +58,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Kraków',
+    locationCode: 'KRK',
     tags: [
       { name: 'Edukacja', variant: 'secondary' },
     ],
@@ -76,6 +82,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Wrocław',
+    locationCode: 'WRO',
     tags: [
       { name: 'Ochrona', variant: 'secondary' },
       { name: 'Handel', variant: 'outline' },
@@ -99,6 +107,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Poznań',
+    locationCode: 'POZ',
     tags: [
       { name: 'Zdrowie', variant: 'destructive' },
       { name: 'Medycyna', variant: 'default' },
@@ -122,6 +132,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty założeń projektów ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Gdańsk',
+    locationCode: 'GDA',
     tags: [
       { name: 'Zdrowie', variant: 'secondary' },
       { name: 'Ochrona', variant: 'outline' },
@@ -145,6 +157,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Warszawa',
+    locationCode: 'WAW',
     tags: [
       { name: 'Ekologia', variant: 'secondary' },
       { name: 'Ochrona', variant: 'outline' },
@@ -168,6 +182,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'prawo_krajowe',
+    location: 'Łódź',
+    locationCode: 'ŁDZ',
     tags: [
       { name: 'Transport', variant: 'default' },
       { name: 'Infrastruktura', variant: 'secondary' },
@@ -191,6 +207,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'instytucje_lokalne',
+    location: 'Szczecin',
+    locationCode: 'SZC',
     tags: [
       { name: 'Socjalne', variant: 'secondary' },
       { name: 'Rodzina', variant: 'outline' },
@@ -214,6 +232,8 @@ export const lawsData = [
     category: 'ustawy',
     projectType: 'Projekty ustaw',
     superCategory: 'instytucje_lokalne',
+    location: 'Warszawa',
+    locationCode: 'WAW',
     tags: [
       { name: 'Praca', variant: 'destructive' },
       { name: 'Socjalne', variant: 'default' },

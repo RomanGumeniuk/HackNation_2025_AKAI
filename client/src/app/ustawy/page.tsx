@@ -2,11 +2,17 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { Filter, Bookmark,X,Tag } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Filter, Bookmark, X, Tag, Mail, BookmarkCheck } from 'lucide-react';
+import { Toaster, toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 import LawsFilter, { FilterState } from '@/components/ustawy/LawsFilter';
 import { 
@@ -24,7 +30,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@/components/ustawy/table';
 import { lawsData } from '@/mock_data/laws';
 
 export default function Ustawy() {
@@ -36,6 +42,8 @@ export default function Ustawy() {
   const [category, setCategory] = useState<'ustawy' | 'rozporzadzenia' | 'inne' | null>('ustawy');
   const [showTags, setShowTags] = useState(false);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+  const [sortColumn, setSortColumn] = useState<'name' | 'lastUpdate' | 'stage' | 'applicant' | 'location'>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [advancedFilters, setAdvancedFilters] = useState<FilterState>({
     dateFrom: '',
     dateTo: '',
@@ -51,11 +59,43 @@ export default function Ustawy() {
       sejm: false,
     },
   });
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [selectedLawId, setSelectedLawId] = useState<string | null>(null);
+  const [subscribedLaws, setSubscribedLaws] = useState<Set<string>>(new Set());
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+      const [key, value] = cookie.trim().split('=');
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>);
+
+    const subscribedLawsData = cookies['subscribedLaws'];
+    if (subscribedLawsData) {
+      try {
+        const decoded = decodeURIComponent(subscribedLawsData);
+        const lawIds = decoded.split(',').filter(id => id);
+        setSubscribedLaws(new Set(lawIds));
+      } catch (e) {
+        console.error('Failed to parse cookie');
+      }
+    }
+  }, []);
 
   const handleFilterChange = (filters: FilterState) => {
     setAdvancedFilters(filters);
     setCurrentPage(1);
+  };
+
+  const handleNewsletterSubscribe = (lawName: string) => {
+    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+      toast.error('Proszę podać prawidłowy adres email');
+      return;
+    }
+    toast.success(`Zapisano na newsletter dla "${lawName}"`);
+    setNewsletterEmail('');
+    setSelectedLawId(null);
   };
 
   const filteredLaws = lawsData.filter((ustawy: any) => {
@@ -64,14 +104,12 @@ export default function Ustawy() {
     const matchesCategory = !category || ustawy.category === category;
     const matchesTags = selectedTags.length === 0 || ustawy.tags.some((tag: any) => selectedTags.includes(tag.name));
     
-    // Advanced filter matching
     const matchesDateFrom = !advancedFilters.dateFrom || new Date(ustawy.createdDate) >= new Date(advancedFilters.dateFrom);
     const matchesDateTo = !advancedFilters.dateTo || new Date(ustawy.createdDate) <= new Date(advancedFilters.dateTo);
     const matchesProgress = advancedFilters.progress === 'dowolny' || ustawy.stage.toLowerCase().includes(advancedFilters.progress);
     const matchesApplicant = advancedFilters.applicant === 'dowolny' || ustawy.applicant.toLowerCase().includes(advancedFilters.applicant);
     const matchesLegislativeNumber = !advancedFilters.legislativeNumber || ustawy.legislativeNumber.toLowerCase().includes(advancedFilters.legislativeNumber.toLowerCase());
     
-    // Checkbox filters
     const matchesCheckboxes = 
       (!advancedFilters.checkboxes.euLaw || ustawy.euLaw) &&
       (!advancedFilters.checkboxes.constitutionalCourt || ustawy.constitutionalCourt) &&
@@ -85,10 +123,37 @@ export default function Ustawy() {
            matchesLegislativeNumber && matchesCheckboxes;
   });
 
-  const totalPages = Math.ceil(filteredLaws.length / itemsPerPage);
+  const sortedLaws = [...filteredLaws].sort((a: any, b: any) => {
+    let aValue: any = a[sortColumn];
+    let bValue: any = b[sortColumn];
+
+    if (sortColumn === 'lastUpdate') {
+      aValue = new Date(a.createdDate).getTime();
+      bValue = new Date(b.createdDate).getTime();
+    }
+
+    if (typeof aValue === 'string') {
+      aValue = aValue.toLowerCase();
+      bValue = bValue.toLowerCase();
+      return sortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    }
+
+    return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+  });
+
+  const handleSort = (column: 'name' | 'lastUpdate' | 'stage' | 'applicant' | 'location') => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const totalPages = Math.ceil(sortedLaws.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedLaws = filteredLaws.slice(startIndex, endIndex);
+  const paginatedLaws = sortedLaws.slice(startIndex, endIndex);
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -181,7 +246,10 @@ export default function Ustawy() {
 
         {showAdvancedFilter && (
           <div className="mb-8">
-            <LawsFilter onFilterChange={handleFilterChange} />
+            <LawsFilter 
+              onFilterChange={handleFilterChange}
+              onClose={() => setShowAdvancedFilter(false)}
+            />
           </div>
         )}
 
@@ -195,7 +263,7 @@ export default function Ustawy() {
               className="flex-1 bg-gray-200"
             />
             <Button className="rounded-full cursor-pointer bg-[#394788] text-white hover:bg-[#2a3560] px-6">
-              Szukaj!
+              Szukaj
             </Button>
             <Button variant="outline" size="icon" className="cursor-pointer rounded-lg" onClick={() => setShowTags(!showTags)}>
               <Tag size={20} />
@@ -207,7 +275,7 @@ export default function Ustawy() {
             className="flex items-center gap-2 border-[#394788] text-[#394788] cursor-pointer hover:bg-[#394788] hover:text-white"
           >
             <Filter  size={18} />
-            {showAdvancedFilter ? <X className="w-5 h-5" /> : 'Zaawansowany filtr'}
+            {showAdvancedFilter ? <X className="cursor-pointer w-5 h-5" /> : 'Zaawansowany filtr'}
           </Button>
         </div>
           </div>
@@ -282,15 +350,36 @@ export default function Ustawy() {
             <div className="px-6 py-12 text-center">
               <p className="text-gray-500">Wybierz kategorię aby zobaczyć akty prawne</p>
             </div>
-          ) : filteredLaws.length > 0 ? (
+          ) : sortedLaws.length > 0 ? (
             <>
               <Table>
                 <TableHeader>
                   <TableRow className="hover:bg-transparent">
-                    <TableHead>Nazwa</TableHead>
-                    <TableHead>Ostatnia Aktualizacja</TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-gray-100" 
+                      onClick={() => handleSort('name')}
+                    >
+                      Nazwa {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('lastUpdate')}
+                    >
+                      Ostatnia Aktualizacja {sortColumn === 'lastUpdate' && (sortDirection === 'asc' ? '↑' : '↓')}
+                    </TableHead>
                     <TableHead>Tagi</TableHead>
-                    <TableHead>Etap</TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('stage')}
+                    >
+                      Etap {sortColumn === 'stage' && (sortDirection === 'asc' ? '↑' : '↓')}
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('location')}
+                    >
+                      Miejscowość {sortColumn === 'location' && (sortDirection === 'asc' ? '↑' : '↓')}
+                    </TableHead>
                     <TableHead className="text-center">Akcje</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -316,10 +405,66 @@ export default function Ustawy() {
                         </div>
                       </TableCell>
                       <TableCell>{ustawy.stage}</TableCell>
+                      <TableCell>
+                        <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                          {ustawy.locationCode}
+                        </span>
+                        <span className="text-xs text-gray-600 ml-2">{ustawy.location}</span>
+                      </TableCell>
                       <TableCell className="text-center">
-                        <Button variant="ghost" size="icon">
-                          <Bookmark size={20} />
-                        </Button>
+                        <Popover
+                          open={selectedLawId === ustawy.id}
+                          onOpenChange={(open) =>
+                            setSelectedLawId(open ? ustawy.id : null)
+                          }
+                        >
+                          <PopoverTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Bookmark size={20} />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-4">
+                              <div>
+                                <h4 className="font-semibold text-sm mb-2">
+                                  Zapisz się na newsletter
+                                </h4>
+                                <p className="text-xs text-gray-600 mb-3">
+                                  Otrzymuj powiadomienia o zmianach w: <br />
+                                  <span className="font-medium text-gray-900">
+                                    {ustawy.name}
+                                  </span>
+                                </p>
+                              </div>
+                              <div className="flex gap-2">
+                                <Input
+                                  type="email"
+                                  placeholder="Twój email"
+                                  value={newsletterEmail}
+                                  onChange={(e) =>
+                                    setNewsletterEmail(e.target.value)
+                                  }
+                                  className="flex-1 text-sm"
+                                  onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                      handleNewsletterSubscribe(ustawy.name);
+                                    }
+                                  }}
+                                />
+                              </div>
+                              <Button
+                                onClick={() =>
+                                  handleNewsletterSubscribe(ustawy.name)
+                                }
+                                className="w-full"
+                                size="sm"
+                              >
+                                <Mail size={16} className="mr-2" />
+                                Zapisz się
+                              </Button>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -373,12 +518,31 @@ export default function Ustawy() {
           )}
         </div>
 
-        {superCategory && filteredLaws.length > 0 && (
+        {superCategory && sortedLaws.length > 0 && (
           <div className="mt-4 text-sm text-black">
-            Znaleziono <span className="font-semibold">{filteredLaws.length}</span> aktów (Strona {currentPage} z {totalPages})
+            Znaleziono <span className="font-semibold">{sortedLaws.length}</span> aktów (Strona {currentPage} z {totalPages})
           </div>
         )}
+
       </div>
+
+      <Toaster 
+        position="bottom-center"
+        theme="light"
+        toastOptions={{
+          classNames: {
+            toast: 'bg-white text-black border border-gray-300',
+            error: 'bg-white text-black border border-gray-300',
+            success: 'bg-white text-black border border-gray-300',
+          },
+          style: {
+            background: '#FFFFFF',
+            color: '#000000',
+            border: '1px solid #E5E5E5',
+            borderRadius: '8px',
+          },
+        }}
+      />
         
     </div>
   );

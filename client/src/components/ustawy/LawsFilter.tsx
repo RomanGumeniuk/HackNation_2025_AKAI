@@ -9,13 +9,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
+import { 
+  CalendarIcon, 
+  Info, 
+  Globe,
+  Scale,
+  BookOpen,
+  AlertCircle,
+  FileText,
+  Building2,
+  X
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
 interface LawsFilterProps {
   onFilterChange: (filters: FilterState) => void;
+  onClose?: () => void;
 }
+
+const Tooltip = ({ text, children }: { text: string; children: React.ReactNode }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  return (
+    <div className="relative inline-block group">
+      {children}
+      <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50">
+        {text}
+      </div>
+    </div>
+  );
+};
 
 export interface FilterState {
   dateFrom: string;
@@ -33,7 +56,7 @@ export interface FilterState {
   };
 }
 
-export default function LawsFilter({ onFilterChange }: LawsFilterProps) {
+export default function LawsFilter({ onFilterChange, onClose }: LawsFilterProps) {
   const [filters, setFilters] = useState<FilterState>({
     dateFrom: '',
     dateTo: '',
@@ -102,43 +125,58 @@ export default function LawsFilter({ onFilterChange }: LawsFilterProps) {
     {
       id: 'euLaw',
       label: 'Projekt realizuje przepisy prawa Unii Europejskiej',
-      icon: '🇪🇺',
+      icon: Globe,
     },
     {
       id: 'constitutionalCourt',
       label: 'Projekt wykonuje orzeczenie Trybunału Konstytucyjnego',
-      icon: '⚖️',
+      icon: Scale,
     },
     {
       id: 'lawBased',
       label: 'Projekt opracowany na podstawie założeń projektu ustaw',
-      icon: '§',
+      icon: BookOpen,
     },
     {
       id: 'separateProcess',
       label: 'Projekt opracowany w trybie odrębnym',
-      icon: '❗',
+      icon: AlertCircle,
     },
     {
       id: 'journalPublished',
       label: 'Ogłoszono w Dzienniku Ustaw',
-      icon: '📄',
+      icon: FileText,
     },
     {
       id: 'sejm',
       label: 'Skierowanie do prac w Sejmie RP',
-      icon: '🏛️',
+      icon: Building2,
     },
   ];
 
   return (
     <div className="w-full rounded-lg bg-white p-6 shadow-md">
+      <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-200">
+        <h2 className="text-sm font-semibold text-gray-900">Zaawansowane filtry</h2>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-gray-100 rounded-md transition-colors text-gray-500 hover:text-gray-700"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+      </div>
       <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-        {/* Data Range */}
         <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-2">
-            Data utworzenia (od - do)
-          </label>
+          <div className="flex items-center gap-1 mb-2">
+            <label className="block text-xs font-semibold text-gray-700">
+              Data utworzenia (od - do)
+            </label>
+            <Tooltip text="Filtruj projekty ustaw po dacie ich utworzenia">
+              <Info className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+            </Tooltip>
+          </div>
           <div className="flex items-center gap-2">
             <Popover open={dateFromOpen} onOpenChange={setDateFromOpen}>
               <PopoverTrigger asChild>
@@ -210,12 +248,16 @@ export default function LawsFilter({ onFilterChange }: LawsFilterProps) {
           </div>
         </div>
 
-        {/* Progress and Applicant Grid */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
-              Postęp prac
-            </label>
+            <div className="flex items-center gap-1 mb-1">
+              <label className="block text-xs font-semibold text-gray-700">
+                Postęp prac
+              </label>
+              <Tooltip text="Etap zaawansowania projektu ustawy">
+                <Info className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+              </Tooltip>
+            </div>
             <select
               value={filters.progress}
               onChange={(e) => handleInputChange('progress', e.target.value)}
@@ -230,9 +272,14 @@ export default function LawsFilter({ onFilterChange }: LawsFilterProps) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
-              Wnioskodawca
-            </label>
+            <div className="flex items-center gap-1 mb-1">
+              <label className="block text-xs font-semibold text-gray-700">
+                Wnioskodawca
+              </label>
+              <Tooltip text="Jednostka, która wnioskuje o nowelizację ustawy">
+                <Info className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+              </Tooltip>
+            </div>
             <select
               value={filters.applicant}
               onChange={(e) => handleInputChange('applicant', e.target.value)}
@@ -248,11 +295,15 @@ export default function LawsFilter({ onFilterChange }: LawsFilterProps) {
           </div>
         </div>
 
-        {/* Legislative Number */}
         <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
-            Numer z wykazu
-          </label>
+          <div className="flex items-center gap-1 mb-1">
+            <label className="block text-xs font-semibold text-gray-700">
+              Numer z wykazu
+            </label>
+            <Tooltip text="Unikalny numer projektu z wykazu prac legislacyjnych">
+              <Info className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+            </Tooltip>
+          </div>
           <Input
             type="text"
             placeholder="Np. PLS-2024-001"
@@ -264,43 +315,47 @@ export default function LawsFilter({ onFilterChange }: LawsFilterProps) {
           />
         </div>
 
-        {/* Checkboxes - 2 columns */}
         <div>
-          <p className="text-xs font-semibold text-gray-700 mb-2">
-            Kryteria dodatkowe:
-          </p>
-          <div className="grid grid-cols-1 gap-1.5 bg-gray-50 p-2 rounded-md">
-            {checkboxItems.map((item) => (
-              <label
-                key={item.id}
-                className="flex items-start gap-2 p-1.5 rounded hover:bg-gray-100 cursor-pointer transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  checked={
-                    filters.checkboxes[
-                      item.id as keyof FilterState['checkboxes']
-                    ]
-                  }
-                  onChange={() =>
-                    handleCheckboxChange(
-                      item.id as keyof FilterState['checkboxes']
-                    )
-                  }
-                  className="w-4 h-4 mt-0.5 rounded border-gray-300 text-[#394788] focus:ring-[#394788] cursor-pointer shrink-0"
-                />
-                <span className="text-lg leading-none mt-0.5 shrink-0">
-                  {item.icon}
-                </span>
-                <span className="text-xs text-gray-700 leading-tight">
-                  {item.label}
-                </span>
-              </label>
-            ))}
+          <div className="flex items-center gap-1 mb-3">
+            <p className="text-xs font-semibold text-gray-700">
+              Kryteria dodatkowe:
+            </p>
+            <Tooltip text="Dodatkowe warunki spełniane przez projekt ustawy">
+              <Info className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+            </Tooltip>
+          </div>
+          <div className="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-md">
+            {checkboxItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <label
+                  key={item.id}
+                  className="flex items-start gap-2 p-2 rounded hover:bg-white cursor-pointer transition-colors border border-transparent hover:border-gray-300"
+                >
+                  <input
+                    type="checkbox"
+                    checked={
+                      filters.checkboxes[
+                        item.id as keyof FilterState['checkboxes']
+                      ]
+                    }
+                    onChange={() =>
+                      handleCheckboxChange(
+                        item.id as keyof FilterState['checkboxes']
+                      )
+                    }
+                    className="w-4 h-4 mt-0.5 rounded border-gray-300 text-[#394788] focus:ring-[#394788] cursor-pointer shrink-0"
+                  />
+                  <IconComponent className="w-4 h-4 mt-0.5 text-[#394788] shrink-0" />
+                  <span className="text-xs text-gray-700 leading-snug flex-1">
+                    {item.label}
+                  </span>
+                </label>
+              );
+            })}
           </div>
         </div>
 
-        {/* Buttons */}
         <div className="flex justify-between items-center pt-2 border-t border-gray-200">
           <button
             type="button"
