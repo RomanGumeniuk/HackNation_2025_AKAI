@@ -22,7 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@/app/ustawy/Components/table';
 import { lawsData } from '@/mock_data/laws';
 
 export default function Ustawy() {
