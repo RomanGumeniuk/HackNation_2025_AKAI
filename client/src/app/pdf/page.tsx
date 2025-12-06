@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const page = () => {
 
-    const [type, setType] = useState(4); // ma byc -1
+    const [type, setType] = useState(-1); // ma byc -1
     const [title , setTitle] = useState("Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej");
     const [text, setText] = useState([
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo omnis error consequuntur provident, officiis pariatur quo placeat numquam aperiam non eos, aliquam temporibus autem, minus quidem iste tenetur sequi explicabo.",
