@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { 
   Pagination,
   PaginationContent,
@@ -71,7 +70,7 @@ export default function Ustawy() {
               onClick={() => setCategory('ustawy')}
               className={`pb-4 px-4 font-semibold text-sm transition-colors ${
                 category === 'ustawy'
-                  ? 'text-indigo-700 border-b-2 border-indigo-700'
+                  ? 'text-[#394788] border-b-2 border-[#394788]'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -81,7 +80,7 @@ export default function Ustawy() {
               onClick={() => setCategory('rozporzadzenia')}
               className={`pb-4 px-4 font-semibold text-sm transition-colors ${
                 category === 'rozporzadzenia'
-                  ? 'text-indigo-700 border-b-2 border-indigo-700'
+                  ? 'text-[394788] border-b-2 border-[394788]'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -138,8 +137,8 @@ export default function Ustawy() {
                 </Button>
               </div>
               {tagSearchQuery.length > 0 && (
-                <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-sm text-gray-600 mb-2">Sugestie:</p>
+                <div className="mb-4 p-3 bg-[#FFFFFF] rounded-lg border border-gray-200">
+                  <p className="text-sm text-[#EDEFEE] mb-2">Sugestie:</p>
                   <div className="flex flex-wrap gap-2">
                     {filteredTagsForDisplay.slice(0, 5).map((tag: string) => (
                       <Button
@@ -201,7 +200,7 @@ export default function Ustawy() {
                       <TableCell>
                         <a
                           href={`/ustawy/${ustawy.id}`}
-                          className=" text-decoration-line:none  hover:text-indigo-900 hover:underline "
+                          className=" text-decoration-line:none  hover:text-[#394788] hover:underline "
                         >
                           {ustawy.name}
                         </a>
