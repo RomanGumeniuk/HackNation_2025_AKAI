@@ -6,6 +6,15 @@ import Link from 'next/link'
 import { Share2, Heart } from 'lucide-react';
 import Graph from '@/components/details_page/Graph'
 import RepresentativeCard from '@/components/details_page/RepresentativeCard'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 export default function page() {
   const title = "Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej";
@@ -20,22 +29,21 @@ export default function page() {
     "Assumenda esse libero, a ex maxime culpa reiciendis veritatis aliquam quos quae placeat voluptatum sed quod eveniet ea mollitia nemo quam exercitationem in quibusdam! Nobis quasi natus alias voluptas sapiente."
   ];
 
-  return (  
+  return (
     <div className="space-y-8 p-4 max-w-4xl mx-auto">
-      
+
       {/* Intro section */}
       <Background>
-        <Graph/>
+        <Graph />
       </Background>
 
       <Separator />
 
-      {/* Title */}
-      <div className='flex '>
+      <div className='flex'>
         <h1 className="text-2xl font-bold leading-snug">{title}</h1>
 
         {/* Action buttons */}
-        <div className=" gap-3">
+        <div className="gap-5">
           <LinkButton>
             <Heart className="w-4 h-4" />
             Subskrybuj
@@ -76,17 +84,50 @@ export default function page() {
       {/* Footer section */}
       <Separator />
       <h2 className="text-lg font-semibold">Planowane konsultacje w twoim rejonie</h2>
+      <div className='grid grid-cols-2 gap-8'>
+        <Background>
+          Lista najblizszych
+          <Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Invoice</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Method</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {[...Array(10).keys()].map(key => (
+              <TableRow key={key}>
+                <TableCell className="font-medium">INV001</TableCell>
+                <TableCell>Paid</TableCell>
+                <TableCell>Credit Card</TableCell>
+                <TableCell className="text-right">$250.00</TableCell>
+              </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Background>
+        <Background>
+          Mapa
+        </Background>
+      </div>
       <Separator />
       <h2 className="text-lg font-semibold">Osoby odpowiedzialne za ustawe</h2>
-      <RepresentativeCard
-        name="Jan Kowalski"
-        imageUrl="/images/jan.jpg"
-        email="jan.kowalski@sejm.gov.pl"
-        phone="+48 123 456 789"
-        party="Koalicja Obywatelska"
-        stance="approve"     // approve | against | neutral
-      />
-
+      <div className='grid grid-cols-2 gap-6'>
+        {[...Array(8).keys()].map(key => (
+          <RepresentativeCard
+            name="Jan Kowalski"
+            imageUrl="https://github.com/shadcn.png"
+            email="jan.kowalski@sejm.gov.pl"
+            phone="+48 123 456 789"
+            party="Koalicja Obywatelska"
+            stance="approve"     // approve | against | neutral
+            key={key}
+          />
+        ))}
+      </div>
     </div>
   )
 }
