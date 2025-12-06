@@ -1,21 +1,18 @@
 "use client"
 
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { socket } from "../../socket";
+import {
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { SocketContext } from "@/contexts/SocketContext";
+import { composeMessage } from "@/socket";
 
 interface IMessage {
   role: "user" | "bot";
   content: string;
-}
-
-interface IAskBody {
-  userId: string;
-  data: {
-    task: "title" | "summarize" | "answer" | "form";
-    content?: string;
-    prompt?: string;
-  };
-  clearMemory: boolean;
 }
 
 export default function ChatbotWindow(props: {
@@ -25,44 +22,16 @@ export default function ChatbotWindow(props: {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
-  const [userId] = useState(67);
+  const socket = useContext(SocketContext);
 
   // 1. Initialize WebSocket Connection
   useEffect(() => {
     if (props.isClosed) {
-      if (socket.connected) {
-        onConnect();
-      }
-
-      function onConnect() {
-        setIsConnected(true);
-        setTransport(socket.io.engine.transport.name);
-
-        socket.io.engine.on("upgrade", (transport) => {
-          setTransport(transport.name);
-        });
-      }
-
-      function onDisconnect() {
-        setIsConnected(false);
-        setTransport("N/A");
-      }
-
       socket.on("response", (evData) => {
         const data = evData.content;
         const botMsg: IMessage = { role: "bot", content: data };
         setMessages((prev) => [...prev, botMsg]);
       });
-
-      socket.on("connect", onConnect);
-      socket.on("disconnect", onDisconnect);
-
-      return () => {
-        socket.off("connect", onConnect);
-        socket.off("disconnect", onDisconnect);
-      };
     }
   }, [props.isClosed]);
 
@@ -75,15 +44,12 @@ export default function ChatbotWindow(props: {
     if (!input.trim() || !socket.connected) return;
 
     const userMsg: IMessage = { role: "user", content: input };
-    const askBody: IAskBody = {
-      userId: userId.toString(),
-      data: {
-        task: "answer",
-        content: "Ziemia jest płaskim dyskiem",
-        prompt: input,
-      },
-      clearMemory: false,
-    };
+    const askBody = composeMessage(
+      "answer",
+      undefined,
+      input,
+      messages.length == 0 ? true : false
+    );
     setMessages((prev) => [...prev, userMsg]);
 
     socket.emit("query", askBody);
