@@ -18,6 +18,8 @@ const page = () => {
     ]);
     const [file, setFile] = useState(null);
 
+    const handleBaton = () => {};
+
     const handleFile = (e) => {
         console.log("wartość:", e.target.value); // dostęp do e
         setFile(e.target.value);
@@ -31,7 +33,7 @@ const page = () => {
             setType(4);
         }
 
-    }
+    };
 
 
     if (type === -1){
@@ -84,7 +86,7 @@ const page = () => {
                     </div>
                     </Background>
 
-                    teraz kurwa orm i chuj
+                    <button type='submit' onSubmit={handleBaton}>ocen mi tej</button>
                 </div>;
     }
 
