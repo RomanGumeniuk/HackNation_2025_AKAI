@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const page = () => {
 
-    const [type, setType] = useState(null);
+    const [type, setType] = useState(-1);
     const [title , setTitle] = useState("Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej");
     const [text, setText] = useState([
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo omnis error consequuntur provident, officiis pariatur quo placeat numquam aperiam non eos, aliquam temporibus autem, minus quidem iste tenetur sequi explicabo.",
@@ -16,9 +16,25 @@ const page = () => {
     "Vitae velit illo, natus ullam obcaecati impedit rerum excepturi laudantium quis nihil, neque sit voluptas adipisci voluptates cupiditate enim incidunt aut nemo laborum quam et. Error eos maxime delectus veniam!",
     "Assumenda esse libero, a ex maxime culpa reiciendis veritatis aliquam quos quae placeat voluptatum sed quod eveniet ea mollitia nemo quam exercitationem in quibusdam! Nobis quasi natus alias voluptas sapiente."
     ]);
+    const [file, setFile] = useState(null);
+
+    const handleFile = (e) => {
+        console.log("wartość:", e.target.value); // dostęp do e
+        setFile(e.target.value);
+
+        if (type === 1){
+            // feczuj jak dla ustawy
+            setType(3);
+        }
+        if (type === 2){
+            // feczuj dla chuj wie czego
+            setType(4);
+        }
+
+    }
 
 
-    if (type === null){
+    if (type === -1){
         return <div className={"flex justify-top items-center flex-col h-full"}> 
                         <h1>
                             wybierz typ dokumentu
@@ -40,7 +56,7 @@ const page = () => {
                    <div className={"flex justify-top items-center flex-col h-screen"}>
                         <h1 className={"mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
 
-                       <input type="file" accept="application/pdf" className={"border p-2 rounded "}/>
+                       <input type="file" onChange={handleFile} accept="application/pdf" className={"border p-2 rounded "}/>
 
                     </div>
                 </div>;
@@ -50,11 +66,36 @@ const page = () => {
                    <div className={"flex justify-top items-center flex-col h-screen"}>
                         <h1 className={"mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
 
-                       <input type="file" accept="application/pdf" className={"border p-2 rounded "}/>
+                       <input type="file" onChange={handleFile} accept="application/pdf" className={"border p-2 rounded "}/>
 
                     </div>
                 </div>;
     }
+
+    if (type === 3){
+        return <div>
+                    <h1 className="text-2xl font-bold leading-snug">{title}</h1>
+
+                    <Background>
+                    <div className="leading-relaxed text-sm space-y-4">
+                        {text.map((text_2, idx) => (
+                        <p key={idx}>{text_2}</p>
+                        ))}
+                    </div>
+                    </Background>
+
+                    teraz kurwa orm i chuj
+                </div>;
+    }
+
+    if (type === 4){
+        return <div>
+                    <h1 className="text-2xl font-bold leading-snug">Pomagam tobie z tym innym</h1>
+
+                    teraz pomoc z tym innym 
+
+                </div>;
+        }
 
 }
 
