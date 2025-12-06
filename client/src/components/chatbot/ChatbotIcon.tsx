@@ -8,7 +8,7 @@ export default function ChatbotIcon(props:{isClosed:boolean,openChatWindow: Mous
     return (
         <>
             {!props.isClosed &&
-                <div onClick={props.openChatWindow} className={"cursor-pointer border-black border-[1px] max-w-max rounded-full fixed bottom-4 right-4 z-50"}>
+                <div onClick={props.openChatWindow} className={"cursor-pointer border-black border max-w-max rounded-full fixed bottom-4 right-4 z-50"}>
                     <Avatar>
                         <AvatarImage src={"./bot_gemini_cropped.png"} />
                         <AvatarFallback>CB</AvatarFallback>
