@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const page = () => {
 
-    const [type, setType] = useState(3); // ma byc -1
+    const [type, setType] = useState(4); // ma byc -1
     const [title , setTitle] = useState("Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej");
     const [text, setText] = useState([
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo omnis error consequuntur provident, officiis pariatur quo placeat numquam aperiam non eos, aliquam temporibus autem, minus quidem iste tenetur sequi explicabo.",
@@ -88,7 +88,9 @@ const page = () => {
 
     if (type === 3){ //ustawa
         return <div>
-                    <h1 className="text-2xl font-bold leading-snug">{title}</h1>
+                    <div className="flex justify-center items-center">
+                        <h1 className="ml-5 text-2xl font-bold leading-snug">{title}</h1>
+                    </div>
 
                     <Background>
                     <div className="leading-relaxed text-sm space-y-4">
@@ -112,7 +114,9 @@ const page = () => {
 
     if (type === 4){ // wniosek
         return <div>
-                    <h1 className="text-2xl font-bold leading-snug">Chętnie pomogę tobie z tym wnioskiem</h1>
+                    <div className="flex justify-center items-center ">
+                        <h1 className="ml-4 text-2xl font-bold leading-snug">Chętnie pomogę tobie z tym wnioskiem</h1>
+                    </div>
 
                         <Background>
                     <div className="leading-relaxed text-sm space-y-4">
@@ -121,8 +125,9 @@ const page = () => {
                         ))}
                     </div>
                         </Background>
-                    
-
+                    <div className={'flex justify-center items-center'} >
+                        <h1 className={'text-2xl font-bold m-8'}>W razie pytań dopytaj się mnie na chatcie po prawej stronie!</h1>
+                        </div>
                 </div>;
         }
 
