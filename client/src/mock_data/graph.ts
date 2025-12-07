@@ -1,189 +1,321 @@
 import { GraphEdge, GraphNode } from "reagraph";
 
 export const graph_nodes: GraphNode[] = [
-    // --- ROOTS: The Foundation ---
     {
-        id: "1",
-        label: "Polityka Energetyczna Polski do 2040 r. (PEP2040)",
-        fill: "#00FF00",
+        id: "init",
+        label: "Projekt poselski - 15 posłów",
+        fill: "#394788",
+        size: 25,
         data: {
-            description: "Strategiczny dokument wyznaczający kierunki transformacji energetycznej.",
-            date: "2021-02-02",
-            author: "Rada Ministrów"
+            description: "Inicjatywa ustawodawcza grupy 15 posłów Partii Liberalnej",
+            date: "2024-09-15",
+            author: "Grupa posłów Partii Liberalnej",
+            stage: "Inicjatywa",
+            details: "Projekt ustawy o zmianie ustawy – Prawo oświatowe oraz niektórych innych ustaw. Art. 1. W art. 4 po pkt 20 dodaje się pkt 20a definiujący 'społeczność szkolną' jako łącznie osoby: nauczycieli, uczniów i rodziców."
         }
     },
     {
-        id: "2",
-        label: "Dyrektywa RED III (Implementacja)",
-        data: { // No color - In progress
-            description: "Dostosowanie prawa krajowego do nowych wymogów unijnych OZE.",
-            date: "2024-01-15",
-            author: "Ministerstwo Klimatu"
-        }
-    },
-
-    // --- BRANCH: Nuclear Energy (Atom) ---
-    {
-        id: "3",
-        label: "Specustawa Jądrowa (Nowelizacja)",
-        fill: "#00FF00",
+        id: "reading-1",
+        label: "I Czytanie w Sejmie",
+        fill: "#5B8FA3",
+        size: 25,
         data: {
-            description: "Przepisy usprawniające wydawanie decyzji środowiskowych dla elektrowni.",
-            date: "2023-04-14",
-            author: "Sejm RP"
+            description: "Pierwsze czytanie na posiedzeniu plenarnym",
+            date: "2024-10-08",
+            stage: "I Czytanie",
+            details: "Przedstawienie projektu przez wnioskodawców. Debata ogólna nad założeniami ustawy.",
+            voting: {
+                total: 460,
+                present: 445,
+                for: 312,
+                against: 98,
+                abstain: 35,
+                result: "Przekazano do komisji"
+            }
         }
     },
     {
-        id: "4",
-        label: "Ustawa o finansowaniu elektrowni jądrowej",
-        data: { // No color - Still working on the model
-            description: "Model finansowy SaHo dla pierwszej polskiej elektrowni.",
-            date: "2024-02-20",
-            author: "Skarb Państwa"
-        }
-    },
-    {
-        id: "5",
-        label: "Projekt referendalny 'Stop Atom'",
-        fill: "#FF0000",
+        id: "committee-1",
+        label: "Komisja Edukacji, Nauki i Młodzieży",
+        fill: "#5B8FA3",
+        size: 25,
         data: {
-            description: "Obywatelski projekt wstrzymujący budowę elektrowni. Odrzucony w pierwszym czytaniu.",
-            date: "2023-09-10",
-            author: "Komitet Obywatelski"
+            description: "Szczegółowa analiza projektu przez komisję",
+            date: "2024-10-15 - 2024-11-12",
+            stage: "Prace komisji",
+            details: "Prace komisji z udziałem ekspertów, wysłuchanie opinii, zgłoszenie poprawek"
         }
     },
-
-    // --- BRANCH: Wind Energy (Wiatraki) ---
     {
-        id: "6",
-        label: "Nowelizacja Ustawy 10H",
-        fill: "#00FF00",
+        id: "amendment-1",
+        label: "Poprawka: Rozszerzenie definicji",
+        fill: "#22C55E",
+        size: 20,
         data: {
-            description: "Zliberalizowanie zasad odległościowych dla wiatraków (700m).",
-            date: "2023-03-09",
-            author: "Rząd RP"
+            description: "Poprawka przyjęta",
+            date: "2024-10-28",
+            stage: "Głosowanie nad poprawką",
+            author: "Poseł Partii Konserwatywnej",
+            details: "Rozszerzenie definicji społeczności szkolnej o pracowników administracji i obsługi szkół",
+            voting: {
+                total: 27,
+                present: 27,
+                for: 18,
+                against: 7,
+                abstain: 2,
+                result: "Przyjęta"
+            }
         }
     },
     {
-        id: "7",
-        label: "Poprawka '500 metrów'",
-        fill: "#FF0000",
+        id: "amendment-2",
+        label: "Poprawka: Rada uczniów",
+        fill: "#22C55E",
+        size: 20,
         data: {
-            description: "Odrzucona poprawka senacka zmniejszająca dystans do 500m.",
-            date: "2023-02-28",
-            author: "Senat RP"
+            description: "Poprawka przyjęta",
+            date: "2024-11-05",
+            stage: "Głosowanie nad poprawką",
+            author: "Poseł Partii Lewicowej",
+            details: "Dodanie przepisów dotyczących obowiązkowego uczestnictwa przedstawicieli rady uczniów w posiedzeniach społeczności szkolnej",
+            voting: {
+                total: 27,
+                present: 27,
+                for: 21,
+                against: 4,
+                abstain: 2,
+                result: "Przyjęta"
+            }
         }
     },
     {
-        id: "8",
-        label: "Ustawa o Morskich Farmach Wiatrowych (Offshore)",
-        fill: "#00FF00",
+        id: "amendment-3",
+        label: "Poprawka: Wyłączenie szkół prywatnych",
+        fill: "#DC2626",
+        size: 20,
         data: {
-            description: "Ramy prawne dla budowy wiatraków na Bałtyku.",
-            date: "2021-01-20",
-            author: "Ministerstwo Aktywów"
+            description: "Poprawka odrzucona",
+            date: "2024-11-08",
+            stage: "Głosowanie nad poprawką",
+            author: "Poseł Partii Prawicowej",
+            details: "Wyłączenie szkół niepublicznych z obowiązku stosowania nowych przepisów - poprawka zakończyła proces",
+            voting: {
+                total: 27,
+                present: 27,
+                for: 5,
+                against: 19,
+                abstain: 3,
+                result: "Odrzucona - koniec ścieżki"
+            }
         }
     },
-
-    // --- BRANCH: Coal & Transition (Górnictwo) ---
     {
-        id: "9",
-        label: "Ustawa o NABE",
-        fill: "#FF0000",
+        id: "reading-2",
+        label: "II Czytanie w Sejmie",
+        fill: "#5B8FA3",
+        size: 25,
         data: {
-            description: "Utworzenie Narodowej Agencji Bezpieczeństwa Energetycznego. Projekt wycofany.",
-            date: "2023-10-10",
-            author: "MAP"
+            description: "Drugie czytanie z debatą nad poprawkami",
+            date: "2024-11-20",
+            stage: "II Czytanie",
+            details: "Sprawozdawca przedstawił 47 poprawek komisji. Zgłoszono 12 nowych poprawek z sali plenarnej."
         }
     },
     {
-        id: "10",
-        label: "Ustawa o osłonach socjalnych dla górników",
-        fill: "#00FF00",
+        id: "amendment-4",
+        label: "Poprawka: Finansowanie samorządów",
+        fill: "#22C55E",
+        size: 20,
         data: {
-            description: "Pakiety odpraw i urlopów górniczych w zamian za zamykanie kopalń.",
-            date: "2022-05-12",
-            author: "Związki Zawodowe / Rząd"
+            description: "Poprawka przyjęta w zmienionej formie",
+            date: "2024-11-25",
+            stage: "Głosowanie nad poprawką",
+            author: "Poseł Partii Ludowej",
+            details: "Zwiększenie subwencji oświatowej dla samorządów o 350 mln zł rocznie",
+            voting: {
+                total: 27,
+                present: 27,
+                for: 19,
+                against: 6,
+                abstain: 2,
+                result: "Przyjęta"
+            }
         }
     },
-
-    // --- BRANCH: Prosumers & Households (Fotowoltaika) ---
     {
-        id: "11",
-        label: "Zmiana systemu rozliczeń (Net-billing)",
-        fill: "#00FF00",
+        id: "amendment-5",
+        label: "Poprawka: Konsultacje z uczniami",
+        fill: "#22C55E",
+        size: 20,
         data: {
-            description: "Przejście z net-meteringu na system sprzedażowy.",
-            date: "2022-04-01",
-            author: "Ministerstwo Klimatu"
+            description: "Poprawka przyjęta",
+            date: "2024-11-26",
+            stage: "Głosowanie nad poprawką",
+            author: "Poseł Partii Liberalnej",
+            details: "Wprowadzenie obowiązkowych konsultacji z radą uczniów przy zmianach w statucie szkoły i regulaminie oceniania",
+            voting: {
+                total: 27,
+                present: 27,
+                for: 23,
+                against: 3,
+                abstain: 1,
+                result: "Przyjęta"
+            }
         }
     },
     {
-        id: "12",
-        label: "Dotacja Mój Prąd 6.0",
-        data: { // Processing new edition
-            description: "Nowa edycja programu obejmująca magazyny energii.",
-            date: "2024-03-01",
-            author: "NFOŚiGW"
-        }
-    },
-
-    // --- BRANCH: Electromobility (Auta elektryczne) ---
-    {
-        id: "13",
-        label: "Ustawa o elektromobilności",
-        fill: "#00FF00",
+        id: "committee-2",
+        label: "Komisja - po poprawkach",
+        fill: "#5B8FA3",
+        size: 25,
         data: {
-            description: "Wprowadzenie Stref Czystego Transportu (SCT).",
-            date: "2022-12-02",
-            author: "Sejm RP"
+            description: "Rozpatrzenie nowych poprawek po II czytaniu",
+            date: "2024-11-25",
+            stage: "Prace komisji",
+            details: "Komisja zaakceptowała nowe poprawki i przygotowała projekt do III czytania"
         }
     },
     {
-        id: "14",
-        label: "Podatek od aut spalinowych",
-        data: { // Processing
-            description: "Projekt opłaty rejestracyjnej uzależnionej od normy Euro.",
-            date: "2024-01-20",
-            author: "Ministerstwo Finansów"
-        }
-    },
-    {
-        id: "15",
-        label: "Zakaz wjazdu aut LPG do centrów miast",
-        fill: "#FF0000",
+        id: "reading-3",
+        label: "III Czytanie - Głosowanie końcowe",
+        fill: "#5B8FA3",
+        size: 25,
         data: {
-            description: "Kontrowersyjna poprawka samorządowa, odrzucona przez wojewodę.",
-            date: "2023-11-15",
-            author: "Rada Miasta"
+            description: "Głosowanie nad całością ustawy",
+            date: "2024-12-03",
+            stage: "III Czytanie",
+            details: "Głosowanie nad ustawą w brzmieniu przyjętym przez komisję wraz ze wszystkimi poprawkami",
+            voting: {
+                total: 460,
+                present: 448,
+                for: 385,
+                against: 48,
+                abstain: 15,
+                result: "Ustawa uchwalona",
+                votingDetails: {
+                    "Partia Liberalna": { for: 145, against: 2, abstain: 1 },
+                    "Partia Konserwatywna": { for: 135, against: 42, abstain: 5 },
+                    "Partia Lewicowa": { for: 38, against: 0, abstain: 2 },
+                    "Partia Ludowa": { for: 34, against: 1, abstain: 3 },
+                    "Partia Prawicowa": { for: 3, against: 28, abstain: 4 },
+                    "Inne": { for: 30, against: 2, abstain: 0 }
+                }
+            }
+        }
+    },
+    {
+        id: "senate-commission",
+        label: "Komisja Nauki, Edukacji i Sportu Senatu",
+        fill: "#5B8FA3",
+        size: 25,
+        data: {
+            description: "Rozpatrzenie ustawy przez komisję senacką",
+            date: "2024-12-05 - 2024-12-15",
+            stage: "Prace komisji senackiej",
+            details: "Komisja przeanalizowała ustawę i zaproponowała poprawki dotyczące samorządu uczniowskiego"
+        }
+    },
+    {
+        id: "senate-amendment-1",
+        label: "Poprawka Senatu: Kompetencje rad uczniów",
+        fill: "#22C55E",
+        size: 20,
+        data: {
+            description: "Poprawka senacka przyjęta",
+            date: "2024-12-15",
+            stage: "Głosowanie nad poprawką senacką",
+            author: "Senator",
+            details: "Doprecyzowanie kompetencji rad uczniów w zakresie współdecydowania o życiu szkoły, w tym prawo opinii w sprawach uczniowskich",
+            voting: {
+                total: 100,
+                present: 97,
+                for: 82,
+                against: 10,
+                abstain: 5,
+                result: "Przyjęta"
+            }
+        }
+    },
+    {
+        id: "senate-vote",
+        label: "Głosowanie w Senacie",
+        fill: "#5B8FA3",
+        size: 25,
+        data: {
+            description: "Senat wprowadził poprawki do ustawy",
+            date: "2024-12-18",
+            stage: "Decyzja Senatu",
+            details: "Senat przyjął ustawę z poprawkami",
+            voting: {
+                total: 100,
+                present: 97,
+                for: 76,
+                against: 15,
+                abstain: 6,
+                result: "Przyjęto z poprawkami"
+            }
+        }
+    },
+    {
+        id: "sejm-senate-review",
+        label: "Sejm - Rozpatrzenie poprawek Senatu",
+        fill: "#5B8FA3",
+        size: 25,
+        data: {
+            description: "Sejm rozpatruje poprawki wprowadzone przez Senat",
+            date: "2024-12-20",
+            stage: "Rozpatrzenie stanowiska Senatu",
+            details: "Sejm przyjął wszystkie poprawki Senatu",
+            voting: {
+                total: 460,
+                present: 441,
+                for: 398,
+                against: 28,
+                abstain: 15,
+                result: "Poprawki Senatu przyjęte"
+            }
+        }
+    },
+    {
+        id: "president-wait",
+        label: "Oczekiwanie na podpis Prezydenta",
+        fill: "#FFA500",
+        size: 25,
+        data: {
+            description: "Ustawa przekazana Prezydentowi do podpisu",
+            date: "2024-12-21",
+            stage: "U Prezydenta",
+            details: "Data wpłynięcia do Prezydenta: 2024-12-21. Prezydent ma 21 dni na podjęcie decyzji (do 2025-01-11): podpisanie ustawy, skorzystanie z prawa weta lub skierowanie do Trybunału Konstytucyjnego.",
+            receivedDate: "2024-12-21",
+            deadline: "2025-01-11",
+            daysToSign: 21
         }
     }
 ];
 
 export const graph_edges: GraphEdge[] = [
-    // Root connections
-    { id: "e1-2", source: "1", target: "2" }, // PEP2040 -> EU Directive
-    { id: "e1-3", source: "1", target: "3" }, // PEP2040 -> Nuclear
-    { id: "e1-6", source: "1", target: "6" }, // PEP2040 -> Wind 10H
-    { id: "e1-9", source: "1", target: "9" }, // PEP2040 -> Coal Agency
-    { id: "e1-13", source: "1", target: "13" }, // PEP2040 -> Electromobility
-
-    // Nuclear Branch
-    { id: "e3-4", source: "3", target: "4" }, // Nuclear Act -> Financing Model
-    { id: "e3-5", source: "3", target: "5" }, // Nuclear Act -> Protest Bill
-
-    // Wind Branch
-    { id: "e6-7", source: "6", target: "7" }, // 10H -> Rejected 500m amendment
-    { id: "e6-8", source: "6", target: "8" }, // Wind Onshore -> Wind Offshore (Relation)
-
-    // Coal Branch
-    { id: "e9-10", source: "9", target: "10" }, // NABE -> Social Shields (Related)
-
-    // Prosumer Branch (Connected to Wind/Renewables)
-    { id: "e6-11", source: "6", target: "11" }, // Renewables -> Net Billing
-    { id: "e11-12", source: "11", target: "12" }, // Net Billing -> Subsidy Program
-
-    // Electromobility Branch
-    { id: "e13-14", source: "13", target: "14" }, // Electro Act -> Combustion Tax
-    { id: "e13-15", source: "13", target: "15" }, // Electro Act -> LPG Ban
+    { id: "e1", source: "init", target: "reading-1" },
+    { id: "e2", source: "reading-1", target: "committee-1" },
+    
+    { id: "e3a", source: "committee-1", target: "amendment-1" },
+    { id: "e3b", source: "committee-1", target: "amendment-2" },
+    { id: "e3c", source: "committee-1", target: "amendment-3" },
+    
+    { id: "e4a", source: "amendment-1", target: "reading-2" },
+    { id: "e4b", source: "amendment-2", target: "reading-2" },
+    
+    { id: "e5a", source: "reading-2", target: "amendment-4" },
+    { id: "e5b", source: "reading-2", target: "amendment-5" },
+    
+    { id: "e6a", source: "amendment-4", target: "committee-2" },
+    { id: "e6b", source: "amendment-5", target: "committee-2" },
+    
+    { id: "e7", source: "committee-2", target: "reading-3" },
+    { id: "e8", source: "reading-3", target: "senate-commission" },
+    
+    { id: "e9", source: "senate-commission", target: "senate-amendment-1" },
+    { id: "e10", source: "senate-amendment-1", target: "senate-vote" },
+    
+    { id: "e11", source: "senate-vote", target: "sejm-senate-review" },
+    { id: "e12", source: "sejm-senate-review", target: "president-wait" }
 ];
