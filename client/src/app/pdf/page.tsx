@@ -73,25 +73,28 @@ const page = () => {
 
   return (
     <div>
-      <div className={"flex justify-top items-center flex-col h-screen"}>
-        <h1 className={"mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
+      {!file && <div className="flex flex-col h-screen justify-center items-center text-center">
+        <h1 className="mb-3 text-2xl font-bold p-2">Wgraj plik PDF</h1>
 
-        <input
-          type="file"
-          onChange={handleFile}
-          accept="application/pdf"
-          className={"border p-2 rounded"}
-        />
-      </div>
+        <div className="rounded-lg shadow-lg p-2">
+          <input
+            type="file"
+            onChange={handleFile}
+            accept="application/pdf"
+            className={"border p-2 rounded"}
+          />
+        </div>
+      </div>}
       <div>
         <div className="flex justify-center items-center">
-          <h1 className="ml-5 text-2xl font-bold leading-snug">{title}</h1>
+          <h1 className="m-5 text-[2rem] font-bold leading-snug">{title}</h1>
         </div>
 
-        <Background>
+        {summary && <Background>
           <div className="leading-relaxed text-sm space-y-4">{summary}</div>
-        </Background>
-        <div className="flex justify-center m-2">
+        </Background>}
+
+        {summary && <div className="flex justify-center m-2">
           <button
             className={
               " m-2 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
@@ -101,7 +104,8 @@ const page = () => {
           >
             Poproś naszego asystena o anilizę tej ustawy
           </button>
-        </div>
+        </div>}
+        
         {rating && (
           <Background>
             <div className="leading-relaxed text-sm space-y-4">{rating}</div>
