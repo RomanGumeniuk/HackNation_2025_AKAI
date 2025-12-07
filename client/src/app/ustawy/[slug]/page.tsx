@@ -18,8 +18,10 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Map from '@/components/map/Map'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { LatLngExpression } from 'leaflet'
+import { composeMessage } from '@/socket';
+import { SocketContext } from '@/contexts/SocketContext';
 
 type Consultation = {
   applicant: string;
