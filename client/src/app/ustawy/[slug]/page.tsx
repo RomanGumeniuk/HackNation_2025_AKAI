@@ -22,11 +22,9 @@ import { SocketContext } from "@/contexts/SocketContext";
 import { composeMessage } from "@/socket";
 
 export default function page() {
-  const [socketInit, setSocketInit] = useState(false);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [rating, setRating] = useState("");
-  const [isReady, setReady] = useState(false);
 
   const socket = useContext(SocketContext);
 
@@ -116,7 +114,12 @@ export default function page() {
 
       {/* Main content */}
       <Background>
-        <div className="leading-relaxed text-sm space-y-4">{summary}</div>
+        <div className="leading-relaxed text-sm space-y-4">
+          {summary}
+          <br />
+          <br />
+          {rating}
+        </div>
       </Background>
 
       {/* Footer section */}
