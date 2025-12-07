@@ -15,6 +15,7 @@ const page = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [rating, setRating] = useState("");
+  const [pdfContent, setPdfContent] = useState("");
 
   const socket = useContext(SocketContext);
 
@@ -38,7 +39,10 @@ const page = () => {
           method: "POST",
           body: formData,
         }).then((res) => {
-          res.json().then((json) => (fileContnets = json.data));
+          res.json().then((json) => {
+            fileContnets = json.data;
+            setPdfContent(json.data); // Zapisz pobrany tekst z PDF
+          });
         });
 
         socket.emit(
@@ -64,10 +68,10 @@ const page = () => {
             setTitle(ev.response.content);
             break;
           case "summarize":
-            setTitle(ev.response.content);
+            setSummary(ev.response.content);
             break;
           case "rate":
-            setTitle(ev.response.content);
+            setRating(ev.response.content);
             break;
         }
       });
@@ -87,13 +91,31 @@ const page = () => {
         />
       </div>
       <div>
-        <div className="flex justify-center items-center">
-          <h1 className="ml-5 text-2xl font-bold leading-snug">{title}</h1>
-        </div>
+        {title && (
+          <div className="flex justify-center items-center">
+            <h1 className="ml-5 text-2xl font-bold leading-snug">{title}</h1>
+          </div>
+        )}
 
-        <Background>
-          <div className="leading-relaxed text-sm space-y-4">{summary}</div>
-        </Background>
+        {pdfContent && (
+          <div className="max-w-4xl mx-auto my-6">
+            <Background>
+              <div className="leading-relaxed text-sm space-y-4 whitespace-pre-wrap">
+                {pdfContent}
+              </div>
+            </Background>
+          </div>
+        )}
+
+        {summary && (
+          <div className="max-w-4xl mx-auto my-6">
+            <Background>
+              <h2 className="text-xl font-bold mb-4">Podsumowanie</h2>
+              <div className="leading-relaxed text-sm space-y-4">{summary}</div>
+            </Background>
+          </div>
+        )}
+
         <div className="flex justify-center m-2">
           <button
             className={
@@ -105,10 +127,14 @@ const page = () => {
             Poproś naszego asystena o anilizę tej ustawy
           </button>
         </div>
+        
         {rating && (
-          <Background>
-            <div className="leading-relaxed text-sm space-y-4">{rating}</div>
-          </Background>
+          <div className="max-w-4xl mx-auto my-6">
+            <Background>
+              <h2 className="text-xl font-bold mb-4">Ocena</h2>
+              <div className="leading-relaxed text-sm space-y-4">{rating}</div>
+            </Background>
+          </div>
         )}
       </div>
       ;
