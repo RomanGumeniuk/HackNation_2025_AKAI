@@ -31,11 +31,10 @@ const page = () => {
         let fileContnets;
         const formData = new FormData();
         formData.set("file", new Blob([file as File]));
-        // Build upload URL from SOCKET_URL by replacing port
         const baseUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:8080";
         const uploadUrl = baseUrl.replace(/:\d+$/, ':3000');
         console.log('Upload URL:', uploadUrl + '/upload');
-        fetch(`${uploadUrl}/upload`, {
+        fetch(`${baseUrl}/upload`, {
           method: "POST",
           body: formData,
         }).then((res) => {
