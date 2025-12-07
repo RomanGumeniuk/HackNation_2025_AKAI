@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/ui/navbar";
 import Footer from "@/components/ui/footer";
 import { SocketProvider } from "@/contexts/SocketContext";
+import { AccesibilityProvider } from "@/contexts/AccesibilityContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +28,17 @@ export default function RootLayout({
 }>) {
   return (
     <SocketProvider>
-      <html lang="pl">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-        >
-          <Navbar />
-          <main className={"grow"}>{children}</main>
-          <Footer />
-        </body>
-      </html>
+      <AccesibilityProvider>
+        <html lang="pl">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+          >
+            <Navbar />
+            <main className={"grow"}>{children}</main>
+            <Footer />
+          </body>
+        </html>
+      </AccesibilityProvider>
     </SocketProvider>
   );
 }
