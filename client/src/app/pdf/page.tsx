@@ -31,7 +31,8 @@ const page = () => {
         let fileContnets;
         const formData = new FormData();
         formData.set("file", new Blob([file as File]));
-        fetch("http://127.0.0.1:3000/upload", {
+        const uploadUrl = process.env.NEXT_PUBLIC_SOCKET_URL?.replace(/:\d+$/, ':3000') || "http://localhost:3000";
+        fetch(`${uploadUrl}/upload`, {
           method: "POST",
           body: formData,
         }).then((res) => {
