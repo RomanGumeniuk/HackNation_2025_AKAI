@@ -20,12 +20,14 @@ const lightTheme: Theme = {
         label: {
             color: '#2A6475',
             stroke: '#fff',
-            activeColor: '#1DE9AC'
+            activeColor: '#1DE9AC',
+            fontSize: 12
         },
         subLabel: {
             color: '#2A6475',
             stroke: '#eee',
-            activeColor: '#1DE9AC'
+            activeColor: '#1DE9AC',
+            fontSize: 11
         }
     },
     lasso: {
@@ -45,7 +47,8 @@ const lightTheme: Theme = {
         label: {
             stroke: '#fff',
             color: '#2A6475',
-            activeColor: '#1DE9AC'
+            activeColor: '#1DE9AC',
+            fontSize: 12
         }
     },
     arrow: {
@@ -59,7 +62,8 @@ const lightTheme: Theme = {
         inactiveOpacity: 0.1,
         label: {
             stroke: '#fff',
-            color: '#2A6475'
+            color: '#2A6475',
+            fontSize: 12
         }
     }
 };
