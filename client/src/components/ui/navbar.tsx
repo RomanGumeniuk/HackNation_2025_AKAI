@@ -19,7 +19,6 @@ export default function Navbar(){
                         className="flex items-center gap-3 hover:opacity-90 transition-opacity duration-200 group"
                     >
                         <div className="relative">
-                            <a href="/">
                             <Image 
                                 src="/logo.png" 
                                 width={60} 
@@ -28,7 +27,6 @@ export default function Navbar(){
                                 className="drop-shadow-sm" 
                                 
                             />
-                            </a>
                         </div>
                         <div>
                             <span className="text-[1.6rem] font-bold text-gray-900 tracking-tight block">

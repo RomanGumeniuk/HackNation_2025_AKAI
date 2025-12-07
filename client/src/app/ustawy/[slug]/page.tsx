@@ -17,11 +17,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import Map from '@/components/map/Map'
+import dynamic from 'next/dynamic'
 import { useContext, useEffect, useState } from 'react'
 import { LatLngExpression } from 'leaflet'
 import { composeMessage } from '@/socket';
 import { SocketContext } from '@/contexts/SocketContext';
+
+const Map = dynamic(() => import('@/components/map/Map'), { 
+  ssr: false,
+  loading: () => <div className="w-full min-w-96 h-96 bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">Ładowanie mapy...</div>
+});
 
 type Consultation = {
   applicant: string;
