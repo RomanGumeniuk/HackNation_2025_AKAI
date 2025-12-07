@@ -18,7 +18,6 @@ import {
 import { useRouter } from 'next/router'
 
 
-
 export default function page() {
   const title = "Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej";
   const lorem_ips = [
