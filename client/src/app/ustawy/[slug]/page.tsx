@@ -143,7 +143,6 @@ export default function page() {
         </Badge>
       </div>
 
-      {/* Main content */}
       <Background>
         <div className="leading-relaxed text-sm space-y-4">
           {summary}
@@ -152,8 +151,7 @@ export default function page() {
           {rating}
         </div>
       </Background>
-
-      {/* Footer section */}
+    
       <Separator />
       <h2 className="text-lg font-semibold">
         Planowane konsultacje w twoim rejonie dot tej ustawy

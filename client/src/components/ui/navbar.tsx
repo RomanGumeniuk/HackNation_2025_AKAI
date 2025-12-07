@@ -11,25 +11,47 @@ export default function Navbar(){
     ];
 
     return (
-        <>
-            <header className={"flex justify-between items-center w-full h-20 px-6 bg-[#EDEFEE] shadow-md"}>
-                <Link href={"/"} className={"flex items-center gap-3 hover:opacity-80 transition-opacity duration-300"}>
-                    <Image src={"/logo.png"} width={"70"} height={"70"} alt={"AKAI Logo"} className={"drop-shadow-sm"} />
-                    <span className={"text-3xl font-bold text-black"}>Obywatel Prawa</span>
-                </Link>
+        <header className="w-full bg-white border-b-1 border-gray-200 shadow-sm">
+            <div className="mx-auto max-w-6xl px-6">
+                <div className="flex justify-between items-center h-20">
+                    <Link 
+                        href="/" 
+                        className="flex items-center gap-3 hover:opacity-90 transition-opacity duration-200 group"
+                    >
+                        <div className="relative">
+                            <a href="/">
+                            <Image 
+                                src="/logo.png" 
+                                width={60} 
+                                height={60} 
+                                alt="AKAI Logo" 
+                                className="drop-shadow-sm" 
+                                
+                            />
+                            </a>
+                        </div>
+                        <div>
+                            <span className="text-[1.6rem] font-bold text-gray-900 tracking-tight block">
+                                Obywatel Prawa
+                            </span>
+                            
+                        </div>
+                    </Link>
 
-                <nav className={"flex items-center gap-8 mr-20"}>
-                    {routes.map(route => (
-                        <Link 
-                            key={route.name} 
-                            href={route.url} 
-                            className={"text-gray-800 font-medium px-4 py-2 rounded-lg hover:bg-white/50 hover:text-sky-700 transition-all duration-300 hover:shadow-sm"}
-                        >
-                            {route.name}
-                        </Link>
-                    ))}
-                </nav>
-            </header>
-        </>
+                    <nav className="flex items-center gap-1">
+                        {routes.map((route, index) => (
+                            <Link 
+                                key={route.name} 
+                                href={route.url} 
+                                className="relative text-gray-700 font-medium px-4 py-2 rounded-lg hover:bg-[#EDEFEE] hover:text-[#394788] transition-all duration-200 group"
+                            >
+                                {route.name}
+                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#394788] group-hover:w-3/4 transition-all duration-300"></span>
+                            </Link>
+                        ))}
+                    </nav>
+                </div>
+            </div>
+        </header>
     )
 }
