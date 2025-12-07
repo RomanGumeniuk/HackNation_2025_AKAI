@@ -30,6 +30,6 @@ export const composeMessage = (
   };
 };
 
-const socket = io("http://127.0.0.1:3000/");
+const socket = io("http://146.59.16.213:8080/");
 
 export default socket;

@@ -70,7 +70,7 @@ const page = () => {
 
       const formData = new FormData();
       formData.set("file", new Blob([file as File]));
-      const upload = await fetch("http://127.0.0.1:3000/upload", {
+      const upload = await fetch("http://146.59.16.213:8080/upload", {
         method: "POST",
         body: formData,
       });

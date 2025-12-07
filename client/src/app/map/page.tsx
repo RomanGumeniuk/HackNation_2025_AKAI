@@ -1,7 +1,17 @@
 "use client";
 
-import Map from "@/components/map/Map";
+import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
+
+// Import Map component with SSR disabled
+const Map = dynamic(() => import("@/components/map/Map"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+      <p className="text-gray-500">Loading map...</p>
+    </div>
+  ),
+});
 
 export default function page(){
 

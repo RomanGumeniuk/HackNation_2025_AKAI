@@ -1,4 +1,4 @@
-import { Theme } from "@/lib/graphTheme"
+import type { Theme } from "reagraph"
 
 export const lightTheme: Theme = {
     canvas: { background: '#fff' },
