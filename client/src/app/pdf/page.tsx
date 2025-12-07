@@ -6,12 +6,10 @@ import { Upload, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import {
   ChangeEventHandler,
-  MouseEventHandler,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { ChangeEventHandler, useContext, useEffect, useState } from "react";
 
 const page = () => {
   const [file, setFile] = useState<null | File>(null);
@@ -21,6 +19,7 @@ const page = () => {
   const [rating, setRating] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const socket = useContext(SocketContext);
 
@@ -55,12 +54,28 @@ const page = () => {
     async function setup() {
       if (aiReady) return;
       setIsUploading(true);
+      setProgress(0);
+      
+      // Simulate upload progress
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 30) {
+            clearInterval(progressInterval);
+            return 30;
+          }
+          return prev + 5;
+        });
+      }, 200);
+
       const formData = new FormData();
       formData.set("file", new Blob([file as File]));
       const upload = await fetch("http://127.0.0.1:3000/upload", {
         method: "POST",
         body: formData,
       });
+
+      clearInterval(progressInterval);
+      setProgress(50);
 
       const fileContnets = (await upload.json()).data;
 
@@ -70,6 +85,7 @@ const page = () => {
       );
 
       socket.on("response", () => {
+        setProgress(70);
         setAiReady(true);
       });
     }
@@ -77,23 +93,39 @@ const page = () => {
     setup();
 
     if (file && aiReady) {
+      setProgress(80);
       socket.emit("query", composeMessage("title"));
       socket.emit("query", composeMessage("summarize"));
       socket.emit("query", composeMessage("rate"));
+
+      let completedTasks = 0;
+      const totalTasks = 3;
 
       socket.on("response", (ev) => {
         switch (ev.task) {
           case "title":
             setTitle(ev.response.content);
+            completedTasks++;
             break;
           case "summarize":
             setSummary(ev.response.content);
+            completedTasks++;
             break;
           case "rate":
             setRating(ev.response.content);
+            completedTasks++;
             break;
         }
-        setIsUploading(false);
+        
+        const taskProgress = 80 + (completedTasks / totalTasks) * 20;
+        setProgress(taskProgress);
+        
+        if (completedTasks === totalTasks) {
+          setProgress(100);
+          setTimeout(() => {
+            setIsUploading(false);
+          }, 300);
+        }
       });
     }
   }, [file, aiReady]);
@@ -206,7 +238,7 @@ const page = () => {
                   <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden mt-3">
                     <div
                       className="bg-[#394788] h-1.5 rounded-full transition-all duration-500"
-                      style={{ width: "60%" }}
+                      style={{ width: `${progress}%` }}
                     ></div>
                   </div>
                 </div>
@@ -280,7 +312,8 @@ const page = () => {
                       setTitle("");
                       setSummary("");
                       setRating("");
-                      aiReady(false);
+                      setAiReady(false);
+                      setProgress(0);
                     }}
                   >
                     Wgraj następny plik
