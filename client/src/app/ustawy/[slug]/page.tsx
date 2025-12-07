@@ -1,13 +1,11 @@
-"use client";
-
-import Background from "@/components/details_page/Background";
-import LinkButton from "@/components/details_page/LinkButton";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { Share2, Heart } from "lucide-react";
-import Graph from "@/components/details_page/Graph";
-import RepresentativeCard from "@/components/details_page/RepresentativeCard";
+import Background from '@/components/details_page/Background'
+import LinkButton from '@/components/details_page/LinkButton'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import Link from 'next/link'
+import { Share2, Bookmark} from 'lucide-react';
+import Graph from '@/components/details_page/Graph'
+import RepresentativeCard from '@/components/details_page/RepresentativeCard'
 import {
   Table,
   TableBody,
@@ -16,10 +14,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ustawy/table";
-import { useContext, useEffect, useState } from "react";
-import { SocketContext } from "@/contexts/SocketContext";
-import { composeMessage } from "@/socket";
+} from "@/components/ui/table"
+import { useRouter } from 'next/router'
+
 
 export default function page() {
   const [title, setTitle] = useState("");
@@ -70,22 +67,20 @@ export default function page() {
 
   useEffect(() => {}, []);
 
+ 
+
   return (
     <div className="space-y-8 p-4 max-w-4xl mx-auto">
-      {/* Intro section */}
-      <Background>
-        <Graph />
-      </Background>
+      <Graph />
 
       <Separator />
 
       <div className="flex">
         <h1 className="text-2xl font-bold leading-snug">{title}</h1>
 
-        {/* Action buttons */}
         <div className="gap-5">
           <LinkButton>
-            <Heart className="w-4 h-4" />
+            <Bookmark className="w-4 h-4" />
             Subskrybuj
           </LinkButton>
 
@@ -96,7 +91,6 @@ export default function page() {
         </div>
       </div>
 
-      {/* Badges */}
       <div className="flex flex-wrap justify-center gap-20">
         <Badge variant="default" className="bg-yellow-500">
           <Link href="/">Badge</Link>

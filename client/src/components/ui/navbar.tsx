@@ -7,6 +7,7 @@ export default function Navbar(){
         {name: "Dziennik ustaw", url : "/dziennik_ustaw"},
         {name: "Konsultacje", url : "/konsultacje"},
         {name: "Asystent", url : "/asystent"},
+        {name: "Edukacja", url : "/edukacja"},
     ]
 
     return (

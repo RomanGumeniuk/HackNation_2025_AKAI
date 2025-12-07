@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -9,13 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-
-import LawsFilter, { FilterState } from '@/components/ustawy/LawsFilter';
-import { 
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -30,8 +21,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ustawy/table';
+} from '@/components/ui/table';
 import { lawsData } from '@/mock_data/laws';
+import { PopoverContent,Popover, PopoverTrigger } from '@/components/ui/popover';
+import LawsFilter, { FilterState } from '@/components/ustawy/LawsFilter';
 
 export default function Ustawy() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -172,14 +165,12 @@ export default function Ustawy() {
 
   const allTags = Array.from(new Set(lawsData.flatMap((ustawy: any) => ustawy.tags.map((t: any) => t.name)))) as string[];
 
-  const filteredTagsForDisplay = allTags.filter(tag => 
+  const filteredTagsForDisplay = allTags.filter(tag =>
     tag.toLowerCase().includes(tagSearchQuery.toLowerCase())
   );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
-       
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-8 border-b border-gray-200">
@@ -300,8 +291,8 @@ export default function Ustawy() {
                   onChange={(e) => setTagSearchQuery(e.target.value)}
                   className="flex-1 bg-gray-200 text-sm"
                 />
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setTagSearchQuery('');
                     setSelectedTags([]);
@@ -335,23 +326,23 @@ export default function Ustawy() {
 
               <div className="flex flex-wrap gap-2">
                 {filteredTagsForDisplay.map((tag: string) => (
-              <Button
-                key={tag}
-                variant={selectedTags.includes(tag) ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => {
-                  if (selectedTags.includes(tag)) {
-                    setSelectedTags(selectedTags.filter((t) => t !== tag));
-                  } else {
-                    setSelectedTags([...selectedTags, tag]);
-                  }
-                }}
-                className="rounded-full"
-              >
-                {tag}
-              </Button>
-            ))}
-          </div>
+                  <Button
+                    key={tag}
+                    variant={selectedTags.includes(tag) ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => {
+                      if (selectedTags.includes(tag)) {
+                        setSelectedTags(selectedTags.filter((t) => t !== tag));
+                      } else {
+                        setSelectedTags([...selectedTags, tag]);
+                      }
+                    }}
+                    className="rounded-full"
+                  >
+                    {tag}
+                  </Button>
+                ))}
+              </div>
             </>
           )}
         </div>
@@ -489,7 +480,7 @@ export default function Ustawy() {
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
+                      <PaginationPrevious
                         href="#"
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                           e.preventDefault();
@@ -513,7 +504,7 @@ export default function Ustawy() {
                       </PaginationItem>
                     ))}
                     <PaginationItem>
-                      <PaginationNext 
+                      <PaginationNext
                         href="#"
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                           e.preventDefault();
