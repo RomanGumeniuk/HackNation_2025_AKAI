@@ -31,11 +31,8 @@ export function AccesibilityProvider({
         fontSize,
         letterSpacing,
         highContrast,
-        // @ts-ignore
         setFontSize,
-        // @ts-ignore
         setLetterSpacing,
-        // @ts-ignore
         setHighContrast,
       }}
     >
