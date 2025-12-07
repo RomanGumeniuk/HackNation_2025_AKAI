@@ -3,7 +3,7 @@ import LinkButton from '@/components/details_page/LinkButton'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
-import { Share2, Heart } from 'lucide-react';
+import { Share2, Bookmark} from 'lucide-react';
 import Graph from '@/components/details_page/Graph'
 import RepresentativeCard from '@/components/details_page/RepresentativeCard'
 import {
@@ -15,6 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useRouter } from 'next/router'
+
+const
 
 export default function page() {
   const title = "Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej";
@@ -29,10 +32,11 @@ export default function page() {
     "Assumenda esse libero, a ex maxime culpa reiciendis veritatis aliquam quos quae placeat voluptatum sed quod eveniet ea mollitia nemo quam exercitationem in quibusdam! Nobis quasi natus alias voluptas sapiente."
   ];
 
+ 
+
   return (
     <div className="space-y-8 p-4 max-w-4xl mx-auto">
 
-      {/* Intro section */}
       <Background>
         <Graph />
       </Background>
@@ -42,10 +46,9 @@ export default function page() {
       <div className='flex'>
         <h1 className="text-2xl font-bold leading-snug">{title}</h1>
 
-        {/* Action buttons */}
         <div className="gap-5">
           <LinkButton>
-            <Heart className="w-4 h-4" />
+            <Bookmark className="w-4 h-4" />
             Subskrybuj
           </LinkButton>
 
@@ -56,7 +59,6 @@ export default function page() {
         </div>
       </div>
 
-      {/* Badges */}
       <div className="flex flex-wrap justify-center gap-20">
         <Badge variant="default" className='bg-yellow-500'>
           <Link href="/">Badge</Link>
