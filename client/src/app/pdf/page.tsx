@@ -94,7 +94,7 @@ const page = () => {
           <div className="leading-relaxed text-sm space-y-4">{summary}</div>
         </Background>}
 
-        {summary && <div className="flex justify-center m-2">
+        {/* {summary && <div className="flex justify-center m-2">
           <button
             className={
               " m-2 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
@@ -104,12 +104,19 @@ const page = () => {
           >
             Poproś naszego asystena o anilizę tej ustawy
           </button>
-        </div>}
+        </div>} */}
         
         {rating && (
+          <>
+
+            <div className="flex justify-center items-center m-5">
+            <h1 className="text-2xl font-bold text-gray-700">Analiza wpływu ustawy przez naszego Asystenta</h1>
+            </div>
+
           <Background>
             <div className="leading-relaxed text-sm space-y-4">{rating}</div>
           </Background>
+          </>
         )}
       </div>
       ;
