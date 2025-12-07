@@ -31,6 +31,7 @@ const page = () => {
         let fileContnets;
         const formData = new FormData();
         formData.set("file", new Blob([file as File]));
+        console.log(window.location.host + ":8080/uplaod")
         const baseUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:8080";
         const uploadUrl = baseUrl.replace(/:\d+$/, ':3000');
         console.log('Upload URL:', uploadUrl + '/upload');
