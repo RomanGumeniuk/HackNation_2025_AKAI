@@ -23,6 +23,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: true,
     sejm: true,
+    follows: 45,
   },
   {
     id: '2',
@@ -48,6 +49,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: false,
     sejm: true,
+    follows: 78,
   },
   {
     id: '3',
@@ -72,6 +74,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: true,
     sejm: true,
+    follows: 92,
   },
   {
     id: '4',
@@ -97,6 +100,7 @@ export const lawsData = [
     separateProcess: true,
     journalPublished: true,
     sejm: false,
+    follows: 34,
   },
   {
     id: '5',
@@ -122,6 +126,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: false,
     sejm: true,
+    follows: 67,
   },
   {
     id: '6',
@@ -147,6 +152,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: true,
     sejm: true,
+    follows: 56,
   },
   {
     id: '7',
@@ -172,6 +178,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: true,
     sejm: true,
+    follows: 81,
   },
   {
     id: '8',
@@ -197,6 +204,7 @@ export const lawsData = [
     separateProcess: true,
     journalPublished: false,
     sejm: true,
+    follows: 23,
   },
   {
     id: '9',
@@ -222,6 +230,7 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: true,
     sejm: true,
+    follows: 72,
   },
   {
     id: '10',
@@ -247,5 +256,6 @@ export const lawsData = [
     separateProcess: false,
     journalPublished: true,
     sejm: false,
+    follows: 89,
   },
 ];
