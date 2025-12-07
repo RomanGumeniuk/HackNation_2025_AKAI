@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 
+
 const page = () => {
   const [file, setFile] = useState<null | File>(null);
   const [aiReady, setAiReady] = useState(false);
