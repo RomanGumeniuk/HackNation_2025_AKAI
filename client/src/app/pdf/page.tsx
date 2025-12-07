@@ -4,14 +4,8 @@ import { SocketContext } from "@/contexts/SocketContext";
 import { composeMessage } from "@/socket";
 import { Upload, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
 import { ChangeEventHandler, useContext, useEffect, useState } from "react";
+
 
 const page = () => {
   const [file, setFile] = useState<null | File>(null);
