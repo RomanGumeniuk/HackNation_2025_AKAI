@@ -3,6 +3,7 @@ import Background from '@/components/details_page/Background'
 import { SocketContext } from "@/contexts/SocketContext";
 import { composeMessage } from "@/socket";
 import { Upload, FileText } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import {
   ChangeEventHandler,
   MouseEventHandler,
@@ -225,7 +226,9 @@ const page = () => {
             </div>
 
             {summary && <Background>
-              <div className="leading-relaxed text-sm space-y-4">{summary}</div>
+              <div className="leading-relaxed text-sm space-y-4 prose prose-sm max-w-none">
+                <ReactMarkdown>{summary}</ReactMarkdown>
+              </div>
             </Background>}
         
             {rating && (
@@ -235,7 +238,9 @@ const page = () => {
                 </div>
 
                 <Background>
-                  <div className="leading-relaxed text-sm space-y-4">{rating}</div>
+                  <div className="leading-relaxed text-sm space-y-4 prose prose-sm max-w-none">
+                    <ReactMarkdown>{rating}</ReactMarkdown>
+                  </div>
                 </Background>
 
                 <div className="flex justify-center m-6">
