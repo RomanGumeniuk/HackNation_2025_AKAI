@@ -93,18 +93,6 @@ const page = () => {
         {summary && <Background>
           <div className="leading-relaxed text-sm space-y-4">{summary}</div>
         </Background>}
-
-        {/* {summary && <div className="flex justify-center m-2">
-          <button
-            className={
-              " m-2 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-            }
-            type="button"
-            onClick={handleAnalyze}
-          >
-            Poproś naszego asystena o anilizę tej ustawy
-          </button>
-        </div>} */}
         
         {rating && (
           <>
@@ -116,6 +104,16 @@ const page = () => {
           <Background>
             <div className="leading-relaxed text-sm space-y-4">{rating}</div>
           </Background>
+
+          {file && <div className="flex justify-center m-2">
+          <button
+            className="m-2 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+            type="button"
+            onClick={() => setFile(null)}
+          >
+            Wgraj następny plik
+          </button>
+        </div>}
           </>
         )}
       </div>
