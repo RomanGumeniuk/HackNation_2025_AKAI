@@ -27,16 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SocketProvider>
-      <html lang="pl">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-        >
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </body>
-      </html>
+    <SocketProvider>      
       <AccesibilityProvider>
         <html lang="pl">
           <body
