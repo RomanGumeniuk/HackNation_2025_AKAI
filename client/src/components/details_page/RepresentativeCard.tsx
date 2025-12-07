@@ -62,7 +62,6 @@ export default function RepresentativeCard({
 
             <CardContent className="space-y-4">
 
-                {/* Stance indicator */}
                 <div className="flex items-center gap-2">
                     <span
                         className={`text-white px-3 py-1 rounded-full text-xs font-medium ${stanceBadgeColor}`}
