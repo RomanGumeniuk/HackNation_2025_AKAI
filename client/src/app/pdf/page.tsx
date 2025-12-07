@@ -74,13 +74,13 @@ const page = () => {
   return (
     <div>
       <div className={"flex justify-top items-center flex-col h-screen"}>
-        <h1 className={"mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
+        <h1 className={"mt-5 mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
 
         <input
           type="file"
           onChange={handleFile}
           accept="application/pdf"
-          className={"border p-2 rounded"}
+          className={"border p-2 rounded cursor-pointer"}
         />
       </div>
       <div>
