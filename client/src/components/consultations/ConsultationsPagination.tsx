@@ -37,7 +37,7 @@ export function ConsultationsPagination({
   };
 
   return (
-    <div className="px-6 py-4 border-t bg-white">
+    <div className="px-6 py-4 border-t border-gray-200 bg-gray-50/50">
       <Pagination>
         <PaginationContent>
           <PaginationItem>
@@ -47,7 +47,7 @@ export function ConsultationsPagination({
                 e.preventDefault();
                 if (currentPage > 1) onPageChange(currentPage - 1);
               }}
-              className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+              className={`${currentPage === 1 ? 'pointer-events-none opacity-50' : ''} text-[#394788]`}
             />
           </PaginationItem>
           {getPageNumbers().map((page) => (
@@ -59,6 +59,7 @@ export function ConsultationsPagination({
                   e.preventDefault();
                   onPageChange(page);
                 }}
+                className={page === currentPage ? 'bg-[#394788] text-white' : 'text-[#394788]'}
               >
                 {page}
               </PaginationLink>
@@ -71,7 +72,7 @@ export function ConsultationsPagination({
                 e.preventDefault();
                 if (currentPage < totalPages) onPageChange(currentPage + 1);
               }}
-              className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+              className={`${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''} text-[#394788]`}
             />
           </PaginationItem>
         </PaginationContent>

@@ -5,23 +5,23 @@ interface TypeFilterTabsProps {
 
 export function TypeFilterTabs({ typeFilter, onTypeChange }: TypeFilterTabsProps) {
   return (
-    <div className="flex gap-4 mb-4">
+    <div className="flex gap-6 mb-4 pb-4 border-b border-gray-200">
       <button
         onClick={() => onTypeChange('krajowe')}
-        className={`pb-3 px-4 font-semibold text-sm transition-colors ${
+        className={`font-semibold text-sm transition-colors ${
           typeFilter === 'krajowe'
-            ? 'text-indigo-700 border-b-2 border-indigo-700'
-            : 'text-gray-600 hover:text-gray-800'
+            ? 'text-black border-b-2 border-[#394788] pb-4 -mb-4'
+            : 'text-[#C1C1C1] hover:text-gray-800'
         }`}
       >
         Prawo Krajowe
       </button>
       <button
         onClick={() => onTypeChange('samorządowe')}
-        className={`pb-3 px-4 font-semibold text-sm transition-colors ${
+        className={`font-semibold text-sm transition-colors ${
           typeFilter === 'samorządowe'
-            ? 'text-indigo-700 border-b-2 border-indigo-700'
-            : 'text-gray-600 hover:text-gray-800'
+            ? 'text-black border-b-2 border-[#394788] pb-4 -mb-4'
+            : 'text-[#C1C1C1] hover:text-gray-800'
         }`}
       >
         Instytucje Samorządowe
