@@ -61,10 +61,10 @@ const page = () => {
             setTitle(ev.response.content);
             break;
           case "summarize":
-            setTitle(ev.response.content);
+            setSummary(ev.response.content);
             break;
           case "rate":
-            setTitle(ev.response.content);
+            setRating(ev.response.content);
             break;
         }
       });
