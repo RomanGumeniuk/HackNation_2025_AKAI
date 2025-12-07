@@ -280,7 +280,7 @@ const page = () => {
                       setTitle("");
                       setSummary("");
                       setRating("");
-                      aiReady(false);
+                      setAiReady(false);
                     }}
                   >
                     Wgraj następny plik
