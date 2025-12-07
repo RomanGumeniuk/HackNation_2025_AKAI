@@ -1,13 +1,14 @@
 "use client"
 import dynamic from 'next/dynamic';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { lightTheme } from './graphTheme';
 import { nodeInfos } from './nodeData';
 import { nodes, edges } from './graphConfig';
 import { NodeInfo, Message } from './types';
 import NodeInfoPanel from './NodeInfoPanel';
 import ChatWindow from './ChatWindow';
-import { useWebSocket } from './useWebSocket';
+import { SocketContext } from '@/contexts/SocketContext';
+import { composeMessage } from '@/socket';
 
 const GraphCanvas = dynamic(
     () => import('reagraph').then((mod) => mod.GraphCanvas),
@@ -21,11 +22,25 @@ export default function LegislativeProcessGraph() {
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const socketRef = useWebSocket(isChatOpen, setMessages);
+    const socket = useContext(SocketContext);
 
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+    // useEffect(() => {
+    //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // }, [messages]);
+
+    // useEffect(() => {
+    //     if (isChatOpen) {
+    //         socket.on('response', (data: any) => {
+    //             setMessages((prev) => [...prev, { role: 'bot', content: data.response || data }]);
+    //         });
+    //     }
+
+    //     return () => {
+    //         if (isChatOpen) {
+    //             socket.off('response');
+    //         }
+    //     };
+    // }, [isChatOpen, socket]);
 
     const handleNodeClick = (nodeId: string) => {
         const nodeInfo = nodeInfos.find(n => n.id === nodeId);
@@ -34,36 +49,39 @@ export default function LegislativeProcessGraph() {
         }
     };
 
-    const handleAskAgent = () => {
+    const handleAskAgent = async () => {
         if (!selectedNode) return;
         setIsChatOpen(true);
         
-        const contextMessage = `Powiedz mi więcej o etapie: ${selectedNode.title}. ${selectedNode.context}`;
+        const content = selectedNode.context;
+        // answer
+        const prompt = `Powiedz mi więcej o etapie: ${selectedNode.title}`; //  tutaj wpierdalam to co napisze
         
-        setTimeout(() => {
-            if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-                const userMsg: Message = { role: 'user', content: contextMessage };
-                setMessages((prev) => [...prev, userMsg]);
-                socketRef.current.send(contextMessage);
-            }
+        setTimeout(async () => {
+            const userMsg: Message = { role: 'user', content: prompt };
+            setMessages((prev) => [...prev, userMsg]);
+            
+            const message = composeMessage('answer', content, prompt);
+            socket.emit('ask', message);
         }, 500);
     };
 
-    const handleSendMessage = () => {
-        if (!input.trim() || !socketRef.current) return;
+    // const handleSendMessage = async () => {
+    //     if (!input.trim()) return;
 
-        const userMsg: Message = { role: 'user', content: input };
-        setMessages((prev) => [...prev, userMsg]);
+    //     const userMsg: Message = { role: 'user', content: input };
+    //     setMessages((prev) => [...prev, userMsg]);
 
-        if (socketRef.current.readyState === WebSocket.OPEN) {
-            socketRef.current.send(input);
-        }
-        setInput("");
-    };
+    //     const content = selectedNode ? `${selectedNode.title}\n\n${selectedNode.description}\n\n${selectedNode.context}` : undefined;
+    //     const message = composeMessage('answer', content, input);
+    //     socket.emit('ask', message);
+        
+    //     setInput("");
+    // };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') handleSendMessage();
-    };
+    // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //     if (e.key === 'Enter') handleSendMessage();
+    // };
 
     return (
         <div className='relative w-full h-full'>
