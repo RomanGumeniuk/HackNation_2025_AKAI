@@ -400,7 +400,7 @@ export default function Ustawy() {
                       <TableCell>
                         <div className="flex flex-wrap gap-2">
                           {ustawy.tags.map((tag: any) => (
-                            <Badge key={tag.name} variant={tag.variant}>
+                            <Badge key={tag.name} className="bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200">
                               {tag.name}
                             </Badge>
                           ))}
