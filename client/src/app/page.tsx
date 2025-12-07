@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <>
             <div className="flex items-center justify-center min-h-[50vh]">
-                <SplitText className='text-[3rem] font-bold' text='Wszystkie ustawy na wyciągnięcie myszki' delay={100}    duration={0.8}    ease="power3.out"    splitType="lines" />
+                <SplitText className='text-[3rem] font-bold' text='Wszystkie ustawy na wyciągnięcie myszki' delay={100}    duration={1}    ease="power3.out"    splitType="lines" />
             </div>
 
             <div>
