@@ -12,7 +12,7 @@ export default function Navbar(){
 
     return (
         <>
-            <header className={"flex justify-between items-center w-full h-20 px-6 bg-[#EDEFEE] shadow-md"}>
+            <header className={"flex justify-between items-center w-full h-20 px-6 border-b border-slate-200 border-[1px] shadow-xs"}>
                 <Link href={"/"} className={"flex items-center gap-3 hover:opacity-80 transition-opacity duration-300"}>
                     <Image src={"/logo.png"} width={"70"} height={"70"} alt={"AKAI Logo"} className={"drop-shadow-sm"} />
                     <span className={"text-3xl font-bold text-black"}>Obywatel Prawa</span>
