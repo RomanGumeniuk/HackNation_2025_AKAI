@@ -11,7 +11,6 @@ export default function PdfViewer({ url }: PdfViewerProps) {
 
     return (
         <div className="flex flex-col items-center justify-center w-full min-h-screen bg-gray-50 py-10 px-4">
-            {/* Header / Title Section */}
             <div className="w-full max-w-4xl mb-6 flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-800">Document Preview</h1>
                 <a
@@ -23,10 +22,8 @@ export default function PdfViewer({ url }: PdfViewerProps) {
                 </a>
             </div>
 
-            {/* The Viewer Container */}
             <div className="relative w-full max-w-4xl h-[80vh] bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200">
 
-                {/* Loading Spinner - Visible while loading */}
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
                         <div className="flex flex-col items-center gap-2">
