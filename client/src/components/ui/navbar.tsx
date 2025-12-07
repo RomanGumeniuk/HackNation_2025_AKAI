@@ -4,11 +4,11 @@ import Image from "next/image";
 export default function Navbar(){
 
     const routes = [
-        {name: "Dziennik ustaw", url : "/dziennik_ustaw"},
-        {name: "Konsultacje", url : "/konsultacje"},
-        {name: "Asystent", url : "/asystent"},
-        {name: "Edukacja", url : "/edukacja"},
-    ]
+      { name: "Dziennik ustaw", url: "/ustawy" },
+      { name: "Konsultacje", url: "/konsultacje" },
+      { name: "Asystent", url: "/pdf" },
+      { name: "Edukacja", url: "/edukacja" },
+    ];
 
     return (
         <>
