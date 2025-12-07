@@ -36,10 +36,7 @@ export default function page() {
 
   return (
     <div className="space-y-8 p-4 max-w-4xl mx-auto">
-
-      <Background>
-        <Graph />
-      </Background>
+      <Graph />
 
       <Separator />
 
