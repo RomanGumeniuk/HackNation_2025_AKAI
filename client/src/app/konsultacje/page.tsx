@@ -179,7 +179,7 @@ export default function Konsultacje() {
             <div className="flex gap-6">
               <button
                 onClick={() => setCategory('najpopularniejsze')}
-                className={`font-semibold text-sm transition-colors ${
+                className={`font-semibold text-sm  ${
                   category === 'najpopularniejsze'
                     ? 'text-black border-b-2 border-[#394788] pb-4 -mb-4'
                     : 'text-[#C1C1C1] hover:text-gray-800'

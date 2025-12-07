@@ -5,7 +5,7 @@ import LinkButton from '@/components/details_page/LinkButton'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
-import { Share2, Bookmark} from 'lucide-react';
+import { Share2, Bookmark, MapPin} from 'lucide-react';
 import Graph from '@/components/details_page/Graph'
 import RepresentativeCard from '@/components/details_page/RepresentativeCard'
 import {
@@ -17,11 +17,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import Map from '@/components/map/Map'
+import dynamic from 'next/dynamic'
 import { useContext, useEffect, useState } from 'react'
 import { LatLngExpression } from 'leaflet'
 import { composeMessage } from '@/socket';
 import { SocketContext } from '@/contexts/SocketContext';
+
+const Map = dynamic(() => import('@/components/map/Map'), { 
+  ssr: false,
+  loading: () => <div className="w-full min-w-96 h-96 bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">Ładowanie mapy...</div>
+});
 
 type Consultation = {
   applicant: string;
@@ -44,6 +49,16 @@ const consultationList: Consultation[] = [
   {applicant: "Urząd Morski w Szczecinie", status: "W trakcie", city: "Szczecin", date: "2024-07-20", coordinates: [53.4285, 14.5528]},  
 ]
 
+const politicians = [
+  { name: "Donald Tusk", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Donald_Tusk_2023.jpg/220px-Donald_Tusk_2023.jpg", email: "d.tusk@sejm.gov.pl", phone: "+48 22 694 1000", party: "Koalicja Obywatelska", stance: "approve" as const },
+  { name: "Jarosław Kaczyński", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Jaros%C5%82aw_Kaczy%C5%84ski_Prezes_PiS.jpg/220px-Jaros%C5%82aw_Kaczy%C5%84ski_Prezes_PiS.jpg", email: "j.kaczynski@sejm.gov.pl", phone: "+48 22 694 2000", party: "Prawo i Sprawiedliwość", stance: "against" as const },
+  { name: "Szymon Hołownia", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Szymon_Ho%C5%82ownia_Kancelaria_Senatu.jpg/220px-Szymon_Ho%C5%82ownia_Kancelaria_Senatu.jpg", email: "s.holownia@sejm.gov.pl", phone: "+48 22 694 3000", party: "Polska 2050", stance: "approve" as const },
+  { name: "Włodzimierz Czarzasty", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/W%C5%82odzimierz_Czarzasty.jpg/220px-W%C5%82odzimierz_Czarzasty.jpg", email: "w.czarzasty@sejm.gov.pl", phone: "+48 22 694 4000", party: "Nowa Lewica", stance: "approve" as const },
+  { name: "Krzysztof Bosak", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Krzysztof_Bosak_Kancelaria_Senatu.jpg/220px-Krzysztof_Bosak_Kancelaria_Senatu.jpg", email: "k.bosak@sejm.gov.pl", phone: "+48 22 694 5000", party: "Konfederacja", stance: "neutral" as const },
+  { name: "Małgorzata Kidawa-Błońska", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Ma%C5%82gorzata_Kidawa-B%C5%82o%C5%84ska_2019.jpg/220px-Ma%C5%82gorzata_Kidawa-B%C5%82o%C5%84ska_2019.jpg", email: "m.kidawa@sejm.gov.pl", phone: "+48 22 694 6000", party: "Koalicja Obywatelska", stance: "approve" as const },
+  { name: "Beata Szydło", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Beata_Szyd%C5%82o_Kancelaria_Senatu.jpg/220px-Beata_Szyd%C5%82o_Kancelaria_Senatu.jpg", email: "b.szydlo@sejm.gov.pl", phone: "+48 22 694 7000", party: "Prawo i Sprawiedliwość", stance: "against" as const },
+  { name: "Władysław Kosiniak-Kamysz", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/W%C5%82adys%C5%82aw_Kosiniak-Kamysz_2023.jpg/220px-W%C5%82adys%C5%82aw_Kosiniak-Kamysz_2023.jpg", email: "w.kosiniak@sejm.gov.pl", phone: "+48 22 694 8000", party: "Polskie Stronnictwo Ludowe", stance: "neutral" as const },
+]
 
 export default function page() {
   const [title, setTitle] = useState("");
@@ -107,114 +122,140 @@ export default function page() {
   const [selectedCityIndex, setSelectedCityIndex] = useState<number | null>(null);
   
   return (
-    <div className="space-y-8 p-4 max-w-4xl mx-auto">
-      <Graph />
+    <div className="min-h-screen bg-[#EDEFEE]">
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+        <Graph />
 
-      <Separator />
+        <Separator className="bg-gray-300" />
 
-      <div className="flex">
-        <h1 className="text-2xl font-bold leading-snug">{title}</h1>
-
-        <div className="gap-5">
-          <LinkButton>
-            <Bookmark className="w-4 h-4" />
-            Subskrybuj
-          </LinkButton>
-
-          <LinkButton>
-            <Share2 className="w-4 h-4" />
-            Podziel się
-          </LinkButton>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold leading-snug text-gray-900">{title}</h1>
         </div>
-      </div>
 
-      <div className="flex flex-wrap justify-center gap-20">
-        <Badge variant="default" className="bg-yellow-500">
-          <Link href="/">Badge</Link>
-        </Badge>
-        <Badge variant="destructive">
-          <Link href="/">Badge</Link>
-        </Badge>
-        <Badge variant="secondary">
-          <Link href="/">Badge</Link>
-        </Badge>
-        <Badge className="bg-green-800">
-          <Link href="/">Badge</Link>
-        </Badge>
-      </div>
-
-      {/* Main content */}
-      <Background>
-        <div className="leading-relaxed text-sm space-y-4">
-          {summary}
-          <br />
-          <br />
-          {rating}
+        <div className="flex flex-wrap justify-center gap-4">
+          <Badge variant="default" className="bg-[#394788] hover:bg-[#394788]/90 transition-colors text-sm px-4 py-1.5">
+            <Link href="/">Prawo Oświatowe</Link>
+          </Badge>
+          <Badge variant="destructive" className="hover:opacity-90 transition-opacity text-sm px-4 py-1.5">
+            <Link href="/">Pilne</Link>
+          </Badge>
+          <Badge variant="secondary" className="hover:bg-gray-300 transition-colors text-sm px-4 py-1.5">
+            <Link href="/">Edukacja</Link>
+          </Badge>
+          <Badge className="bg-green-700 hover:bg-green-800 transition-colors text-sm px-4 py-1.5">
+            <Link href="/">Aktywne</Link>
+          </Badge>
         </div>
-      </Background>
 
-      {/* Footer section */}
-      <Separator />
-      <h2 className="text-lg font-semibold">
-        Planowane konsultacje w twoim rejonie dot tej ustawy
-      </h2>
-      <div className="grid grid-cols-2 gap-8">
         <Background>
-          Lista najblizszych
-          <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Invoice</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-
-              {consultationList.map((consultation, index) => (
-              <TableRow key={index} onClick={() => handleCitySelect(index)} className={`bg-white hover:bg-gray-100 cursor-pointer ${selectedCityIndex===index ? 'bg-gray-200' : ''}`}>
-                <TableCell className="font-medium">{consultation.applicant}</TableCell>
-                <TableCell>{consultation.status}</TableCell>
-                <TableCell>{consultation.city}</TableCell>
-                <TableCell className="text-right">{consultation.date}</TableCell>
-              </TableRow>
-              ))}
-              {/* {[...Array(10).keys()].map((key,index) => (
-              <TableRow key={key} onClick={() => handleCitySelect(index)} className={`bg-white hover:bg-gray-100 cursor-pointer ${selectedCityIndex===index ? 'bg-gray-200' : ''}`}>
-                <TableCell className="font-medium">INV001</TableCell>
-                <TableCell>Paid</TableCell>
-                <TableCell>Credit Card</TableCell>
-                <TableCell className="text-right">$250.00</TableCell>
-              </TableRow>
-              ))} */}
-            </TableBody>
-          </Table>
-        </Background>
-        <Background>
-          <div className='mb-4'>Mapa</div>
-          <div className='w-full flex justify-center'>
-            <Map 
-              markers={selectedCityIndex==null ? consultationList.map(c => c.coordinates) : [consultationList[selectedCityIndex].coordinates]} />
+          <div className="leading-relaxed text-base space-y-4 text-gray-700">
+            {summary}
+            <br />
+            <br />
+            {rating}
           </div>
         </Background>
 
-      </div>
-      <Separator />
-      <h2 className="text-lg font-semibold">Osoby odpowiedzialne za ustawe</h2>
-      <div className="grid grid-cols-2 gap-6">
-        {[...Array(8).keys()].map((key) => (
-          <RepresentativeCard
-            name="Jan Kowalski"
-            imageUrl="https://github.com/shadcn.png"
-            email="jan.kowalski@sejm.gov.pl"
-            phone="+48 123 456 789"
-            party="Koalicja Obywatelska"
-            stance="approve" // approve | against | neutral
-            key={key}
-          />
-        ))}
+        <div className="flex gap-4 justify-center">
+          <LinkButton>
+            <Bookmark className="cursor-pointer w-5 h-5" />
+            <span className="font-medium">Subskrybuj</span>
+          </LinkButton>
+
+          <LinkButton>
+            <Share2 className="w-5 h-5" />
+            <span className="font-medium">Podziel się</span>
+          </LinkButton>
+        </div>
+        
+        <Separator className="bg-gray-300" />
+        
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          Planowane konsultacje w twoim rejonie
+        </h2>
+        <p className="text-gray-600 mb-6">Kliknij na konsultację, aby wyświetlić lokalizację na mapie</p>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-[#394788] mb-4">Lista najbliższych konsultacji</h3>
+            <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+              {consultationList.map((consultation, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleCitySelect(index)}
+                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                    selectedCityIndex === index
+                      ? 'border-[#394788] bg-[#394788]/5 shadow-md'
+                      : 'border-gray-200 bg-white hover:border-[#394788]/40 hover:shadow-sm'
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-semibold text-gray-900 text-base flex-1">{consultation.applicant}</h4>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-2 ${
+                      consultation.status === 'Zakończone' ? 'bg-gray-200 text-gray-700' :
+                      consultation.status === 'W trakcie' ? 'bg-blue-100 text-blue-700' :
+                      'bg-green-100 text-green-700'
+                    }`}>
+                      {consultation.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{consultation.city}</span>
+                    </div>
+                    <div className="text-gray-500">•</div>
+                    <span>{consultation.date}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="lg:sticky lg:top-4 lg:self-start">
+            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+              <h3 className="text-xl font-semibold text-[#394788] mb-4">Mapa lokalizacji</h3>
+              {selectedCityIndex !== null && (
+                <div className="mb-4 p-3 bg-[#394788]/5 rounded-lg">
+                  <p className="text-sm font-medium text-[#394788]">
+                    Wybrana lokalizacja: {consultationList[selectedCityIndex].city}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    {consultationList[selectedCityIndex].applicant}
+                  </p>
+                </div>
+              )}
+              <div className='w-full flex justify-center'>
+                <Map 
+                  markers={selectedCityIndex==null ? consultationList.map(c => c.coordinates) : [consultationList[selectedCityIndex].coordinates]} 
+                />
+              </div>
+              {selectedCityIndex === null && (
+                <p className="text-center text-sm text-gray-500 mt-3">
+                  Wyświetlanie wszystkich lokalizacji
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <Separator className="bg-gray-300" />
+        
+        <h2 className="text-2xl font-bold text-gray-900">Posłowie odpowiedzialni za ustawę</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {politicians.map((politician, index) => (
+            <RepresentativeCard
+              key={index}
+              name={politician.name}
+              imageUrl={politician.imageUrl}
+              email={politician.email}
+              phone={politician.phone}
+              party={politician.party}
+              stance={politician.stance}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

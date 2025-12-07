@@ -1,136 +1,332 @@
 "use client";
 import Background from '@/components/details_page/Background'
-import { useState } from 'react';
+import { SocketContext } from "@/contexts/SocketContext";
+import { composeMessage } from "@/socket";
+import { Upload, FileText } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import {
+  ChangeEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
 
 const page = () => {
+  const [file, setFile] = useState<null | File>(null);
+  const [aiReady, setAiReady] = useState(false);
+  const [title, setTitle] = useState("");
+  const [summary, setSummary] = useState("");
+  const [rating, setRating] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-    const [type, setType] = useState(-1); // ma byc -1
-    const [title , setTitle] = useState("Ustawa z dnia 7 listopada 2025 r. o zmianie ustawy o systemie informacji w ochronie zdrowia oraz ustawy o ochronie ludności i obronie cywilnej");
-    const [text, setText] = useState([
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo omnis error consequuntur provident, officiis pariatur quo placeat numquam aperiam non eos, aliquam temporibus autem, minus quidem iste tenetur sequi explicabo.",
-    "Soluta corrupti quae aspernatur libero asperiores molestiae officia, eligendi vero dolorem laboriosam repellendus neque iste eveniet delectus repellat deleniti modi autem pariatur, doloribus accusantium ducimus, amet et ea? Explicabo, obcaecati.",
-    "Debitis, nihil. Dolor doloremque magni esse maiores incidunt at provident, officiis eum expedita adipisci debitis ipsum illo qui sed vel est dignissimos voluptas voluptatem vero iure dicta inventore! Culpa, pariatur.",
-    "Provident non optio veritatis nisi, repellat hic accusamus in cum et nesciunt accusantium fuga necessitatibus deserunt doloribus quos vitae debitis, blanditiis molestiae impedit. Eius, quibusdam? Eaque ad facere maiores temporibus!",
-    "Accusantium sit corporis vitae temporibus tempore. Facere molestiae cupiditate, repudiandae necessitatibus, voluptate fugit et reiciendis recusandae corporis eligendi suscipit temporibus. Ipsum molestias tempora officia, totam doloremque quis consequuntur cumque quod.",
-    "Consectetur sequi nihil vel nostrum veritatis ea id cum iste maiores nobis fuga qui perspiciatis accusamus recusandae sed dicta corporis incidunt nulla voluptas ipsam, voluptate velit optio delectus! Consectetur, praesentium.",
-    "Vitae velit illo, natus ullam obcaecati impedit rerum excepturi laudantium quis nihil, neque sit voluptas adipisci voluptates cupiditate enim incidunt aut nemo laborum quam et. Error eos maxime delectus veniam!",
-    "Assumenda esse libero, a ex maxime culpa reiciendis veritatis aliquam quos quae placeat voluptatum sed quod eveniet ea mollitia nemo quam exercitationem in quibusdam! Nobis quasi natus alias voluptas sapiente."
-    ]);
-    const [file, setFile] = useState(null);
-    const [opinia, setOpinia] = useState();
+  const socket = useContext(SocketContext);
 
-    const handleBaton = () => {
-        setOpinia([
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo omnis error consequuntur provident, officiis pariatur quo placeat numquam aperiam non eos, aliquam temporibus autem, minus quidem iste tenetur sequi explicabo.",
-    "Soluta corrupti quae aspernatur libero asperiores molestiae officia, eligendi vero dolorem laboriosam repellendus neque iste eveniet delectus repellat deleniti modi autem pariatur, doloribus accusantium ducimus, amet et ea? Explicabo, obcaecati.",
-    "Debitis, nihil. Dolor doloremque magni esse maiores incidunt at provident, officiis eum expedita adipisci debitis ipsum illo qui sed vel est dignissimos voluptas voluptatem vero iure dicta inventore! Culpa, pariatur.",
-    "Provident non optio veritatis nisi, repellat hic accusamus in cum et nesciunt accusantium fuga necessitatibus deserunt doloribus quos vitae debitis, blanditiis molestiae impedit. Eius, quibusdam? Eaque ad facere maiores temporibus!",
-    "Accusantium sit corporis vitae temporibus tempore. Facere molestiae cupiditate, repudiandae necessitatibus, voluptate fugit et reiciendis recusandae corporis eligendi suscipit temporibus. Ipsum molestias tempora officia, totam doloremque quis consequuntur cumque quod.",
-    "Consectetur sequi nihil vel nostrum veritatis ea id cum iste maiores nobis fuga qui perspiciatis accusamus recusandae sed dicta corporis incidunt nulla voluptas ipsam, voluptate velit optio delectus! Consectetur, praesentium.",
-    "Vitae velit illo, natus ullam obcaecati impedit rerum excepturi laudantium quis nihil, neque sit voluptas adipisci voluptates cupiditate enim incidunt aut nemo laborum quam et. Error eos maxime delectus veniam!",
-    "Assumenda esse libero, a ex maxime culpa reiciendis veritatis aliquam quos quae placeat voluptatum sed quod eveniet ea mollitia nemo quam exercitationem in quibusdam! Nobis quasi natus alias voluptas sapiente."
-    ]);
-    };
+  const handleFile: ChangeEventHandler<HTMLInputElement> = (ev) => {
+    //@ts-ignore
+    const selectedFile = ev.target.files[0];
+    if (selectedFile && selectedFile.type === "application/pdf") {
+      setFile(selectedFile);
+    }
+  };
 
-    const handleFile = (e) => {
-        console.log("wartość:", e.target.value); // dostęp do e
-        setFile(e.target.value);
+  const handleDrop = (ev: React.DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    setIsDragOver(false);
+    const droppedFile = ev.dataTransfer.files[0];
+    if (droppedFile && droppedFile.type === "application/pdf") {
+      setFile(droppedFile);
+    }
+  };
 
-        if (type === 1){
-            // feczuj jak dla ustawy
-            setType(3);
+  const handleDragOver = (ev: React.DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (ev: React.DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    setIsDragOver(false);
+  };
+
+  useEffect(() => {
+    async function setup() {
+      if (aiReady) return;
+      setIsUploading(true);
+      setProgress(0);
+      
+      // Simulate upload progress
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 30) {
+            clearInterval(progressInterval);
+            return 30;
+          }
+          return prev + 5;
+        });
+      }, 200);
+
+      const formData = new FormData();
+      formData.set("file", new Blob([file as File]));
+      const upload = await fetch("http://127.0.0.1:3000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      clearInterval(progressInterval);
+      setProgress(50);
+
+      const fileContnets = (await upload.json()).data;
+
+      socket.emit(
+        "query",
+        composeMessage("load", fileContnets, undefined, true)
+      );
+
+      socket.on("response", () => {
+        setProgress(70);
+        setAiReady(true);
+      });
+    }
+
+    setup();
+
+    if (file && aiReady) {
+      setProgress(80);
+      socket.emit("query", composeMessage("title"));
+      socket.emit("query", composeMessage("summarize"));
+      socket.emit("query", composeMessage("rate"));
+
+      let completedTasks = 0;
+      const totalTasks = 3;
+
+      socket.on("response", (ev) => {
+        switch (ev.task) {
+          case "title":
+            setTitle(ev.response.content);
+            completedTasks++;
+            break;
+          case "summarize":
+            setSummary(ev.response.content);
+            completedTasks++;
+            break;
+          case "rate":
+            setRating(ev.response.content);
+            completedTasks++;
+            break;
         }
-        if (type === 2){
-            // feczuj dla chuj wie czego
-            setType(4);
+        
+        const taskProgress = 80 + (completedTasks / totalTasks) * 20;
+        setProgress(taskProgress);
+        
+        if (completedTasks === totalTasks) {
+          setProgress(100);
+          setTimeout(() => {
+            setIsUploading(false);
+          }, 300);
         }
-
-    };
-
-
-    if (type === -1){ // decyzja co wrzucam
-        return <div className={"flex justify-top items-center flex-col h-full"}> 
-                        <h1>
-                            wybierz typ dokumentu
-                        </h1>
-
-                    <div className={"p-2 gap-4 m-2 flex"}>
-
-                        <button onClick={() => setType(1)}>
-                            Ustawa
-                        </button>
-                        <button onClick={() => setType(2)}>
-                            Jakis inny
-                        </button>                    
-                    </div>
-                </div>;
+      });
     }
-    if (type === 1){ //ustawa
-        return <div> 
-                   <div className={"flex justify-top items-center flex-col h-screen"}>
-                        <h1 className={"mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
+  }, [file, aiReady]);
 
-                       <input type="file" onChange={handleFile} accept="application/pdf" className={"border p-2 rounded "}/>
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + " B";
+    else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + " KB";
+    else return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  };
 
+  return (
+    <div className="min-h-screen bg-[#EDEFEE]">
+      {!file && (
+        <div className="flex flex-col items-center px-4 pt-24 pb-12">
+          <div className="w-full max-w-2xl mx-auto">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">
+                Analiza dokumentów legislacyjnych
+              </h1>
+            </div>
+
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              className={`relative bg-white rounded-lg border-2 border-dashed transition-all duration-300 ${
+                isDragOver
+                  ? "border-gray-400 bg-gray-50"
+                  : "border-gray-300 hover:border-gray-400"
+              }`}
+            >
+              <div className="p-10">
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <div className="relative">
+                    <div
+                      className={`w-16 h-16 rounded-lg flex items-center justify-center transition-colors ${
+                        isDragOver ? "bg-gray-100" : "bg-gray-50"
+                      }`}
+                    >
+                      <FileText
+                        className={`w-8 h-8 transition-colors ${
+                          isDragOver ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      />
                     </div>
-                </div>;
-    }
-    if (type === 2){ // wniossek
-        return <div> 
-                   <div className={"flex justify-top items-center flex-col h-screen"}>
-                        <h1 className={"mb-3 text-2 font-bold"}>Wgraj plik PDF</h1>
+                  </div>
 
-                       <input type="file" onChange={handleFile} accept="application/pdf" className={"border p-2 rounded "}/>
+                  <div className="space-y-1">
+                    <p className="text-base font-medium text-gray-700">
+                      {isDragOver
+                        ? "Upuść dokument tutaj"
+                        : "Przeciągnij i upuść dokument PDF"}
+                    </p>
+                    <p className="text-sm text-gray-500">lub</p>
+                  </div>
 
+                  <div className="flex flex-col items-center gap-3 w-full">
+                    <label className="w-full max-w-xs cursor-pointer">
+                      <span className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white border-2 border-gray-300 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all">
+                        <Upload className="w-4 h-4" />
+                        Wybierz plik
+                      </span>
+                      <input
+                        type="file"
+                        onChange={handleFile}
+                        accept="application/pdf"
+                        className="hidden"
+                      />
+                    </label>
+
+                    <p className="text-xs text-gray-500">
+                      Maksymalny rozmiar: 10 MB
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isUploading && file && (
+        <div className="flex flex-col min-h-screen justify-center items-center px-4 py-12 bg-[#EDEFEE]">
+          <div className="w-full max-w-3xl">
+            <div className="bg-white rounded-lg shadow-sm p-10 border border-gray-200">
+              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 bg-[#394788]/10 rounded-lg">
+                <div className="w-10 h-10 border-4 border-[#394788] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+
+              <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
+                Przetwarzanie dokumentu
+              </h2>
+              <p className="text-gray-600 text-center mb-8">
+                System analizuje przesłany plik PDF
+              </p>
+
+              <div className="space-y-4 mb-8">
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-700">
+                      Status:
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-[#394788] rounded-full animate-pulse"></div>
+                      <span className="text-base font-semibold text-[#394788]">
+                        Wczytywanie dokumentu...
+                      </span>
                     </div>
-                </div>;
-    }
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden mt-3">
+                    <div
+                      className="bg-[#394788] h-1.5 rounded-full transition-all duration-500"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                </div>
 
-    if (type === 3){ //ustawa
-        return <div>
-                    <div className="flex justify-center items-center">
-                        <h1 className="ml-5 text-2xl font-bold leading-snug">{title}</h1>
-                    </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white rounded-lg p-4 border border-gray-200">
+                    <p className="text-xs font-semibold text-gray-500 uppercase mb-1">
+                      Rozmiar pliku
+                    </p>
+                    <p className="text-lg font-bold text-gray-900">
+                      {formatFileSize(file.size)}
+                    </p>
+                  </div>
+                  <div className="bg-white rounded-lg p-4 border border-gray-200">
+                    <p className="text-xs font-semibold text-gray-500 uppercase mb-1">
+                      Format
+                    </p>
+                    <p className="text-lg font-bold text-gray-900">PDF</p>
+                  </div>
+                </div>
+              </div>
 
-                    <Background>
-                    <div className="leading-relaxed text-sm space-y-4">
-                        {text.map((text_2, idx) => (
-                        <p key={idx}>{text_2}</p>
-                        ))}
-                    </div>
-                    </Background>
-                    <div className='flex justify-center m-2'>
-                    <button className={' m-2 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors'} type='button' onClick={handleBaton}>Poproś naszego asystena o anilizę tej ustawy</button>
-                    </div>
-                    {opinia && <Background>
-                        <div className="leading-relaxed text-sm space-y-4">
-                        {opinia.map((opinia_2, idx) => (
-                            <p key={idx}>{opinia_2}</p>
-                        ))}
-                        </div>
-                    </Background>}
-                </div>;
-    }
+              <div className="pt-6 border-t border-gray-200">
+                <p className="text-xs font-semibold text-gray-500 uppercase mb-2 text-center">
+                  Nazwa dokumentu
+                </p>
+                <p className="text-sm font-medium text-gray-900 text-center break-all px-4">
+                  {file.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-    if (type === 4){ // wniosek
-        return <div>
-                    <div className="flex justify-center items-center ">
-                        <h1 className="ml-4 text-2xl font-bold leading-snug">Chętnie pomogę tobie z tym wnioskiem</h1>
-                    </div>
+      {!isUploading && file && (
+        <div className="min-h-screen bg-[#EDEFEE] py-8">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex justify-center items-center">
+              <h1 className="m-5 text-[2rem] font-bold leading-snug text-gray-900">
+                {title}
+              </h1>
+            </div>
 
-                        <Background>
-                    <div className="leading-relaxed text-sm space-y-4">
-                        {text.map((text_2, idx) => (
-                        <p key={idx}>{text_2}</p>
-                        ))}
-                    </div>
-                        </Background>
-                    <div className={'flex justify-center items-center'} >
-                        <h1 className={'text-2xl font-bold m-8'}>W razie pytań dopytaj się mnie na chatcie po prawej stronie!</h1>
-                        </div>
-                </div>;
-        }
+            {summary && <Background>
+              <div className="leading-relaxed text-sm space-y-4 prose prose-sm max-w-none">
+                <ReactMarkdown>{summary}</ReactMarkdown>
+              </div>
+            </Background>}
+        
+            {rating && (
+              <>
+                <div className="flex justify-center items-center m-5">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    Analiza wpływu ustawy przez naszego Asystenta Ai
+                  </h1>
+                </div>
 
-}
+                <Background>
+                  <div className="leading-relaxed text-sm space-y-4 prose prose-sm max-w-none">
+                    <ReactMarkdown>{rating}</ReactMarkdown>
+                  </div>
+                </Background>
+
+                <div className="flex justify-center m-6">
+                  <button
+                    className="px-8 py-3 bg-[#394788] text-white font-semibold text-lg rounded-lg hover:bg-[#394788]/90 transition-all shadow-lg hover:shadow-xl"
+                    type="button"
+                    onClick={() => {
+                      setFile(null);
+                      setTitle("");
+                      setSummary("");
+                      setRating("");
+                      setAiReady(false);
+                      setProgress(0);
+                    }}
+                  >
+                    Wgraj następny plik
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default page;

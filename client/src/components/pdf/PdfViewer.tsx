@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function PdfViewer({url}) {
+export default function PdfViewer({url}: {url: string}) {
     const [isLoading, setIsLoading] = useState(true);
 
     return (
