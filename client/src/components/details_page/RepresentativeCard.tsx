@@ -25,10 +25,10 @@ export default function RepresentativeCard({
 
     const borderColor =
         stance === "approve"
-            ? "border-green-500"
+            ? "border-green-600"
             : stance === "against"
-                ? "border-red-500"
-                : "border-gray-300";
+                ? "border-[#D5233F]"
+                : "border-[#394788]/30";
 
     const stanceLabel =
         stance === "approve"
@@ -39,14 +39,14 @@ export default function RepresentativeCard({
 
     const stanceBadgeColor =
         stance === "approve"
-            ? "bg-green-500"
+            ? "bg-green-600 text-white"
             : stance === "against"
-                ? "bg-red-500"
-                : "bg-gray-400";
+                ? "bg-[#D5233F] text-white"
+                : "bg-[#394788] text-white";
 
     return (
         <Card
-            className={`w-full max-w-md bg-[#F5F5F5] rounded-xl p-4 border-2 ${borderColor}`}
+            className={`w-full bg-white hover:shadow-lg transition-shadow duration-200 rounded-xl p-5 border-2 ${borderColor}`}
         >
             <CardHeader className="flex flex-row items-center gap-4">
                 <Avatar className="w-16 h-16">
