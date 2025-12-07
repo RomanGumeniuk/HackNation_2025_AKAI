@@ -1,3 +1,5 @@
+"use client";
+
 import Background from '@/components/details_page/Background'
 import LinkButton from '@/components/details_page/LinkButton'
 import { Badge } from '@/components/ui/badge'
@@ -15,7 +17,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useRouter } from 'next/router'
+import Map from '@/components/map/Map'
+import { useState } from 'react'
+import { LatLngExpression } from 'leaflet'
+
+type Consultation = {
+  applicant: string;
+  status: string;
+  city: string;
+  date: string;
+  coordinates: LatLngExpression;
+};
+
+const consultationList: Consultation[] = [
+  {applicant: "Urzad Miasta Bydgoszcz", status: "Zakończone", city: "Bydgoszcz", date: "2025-06-30", coordinates: [53.1235, 18.0084]},
+  {applicant: "Urzad Miasta Warszawa", status: "W trakcie", city: "Warszawa", date: "2025-07-15", coordinates: [52.2297, 21.0122]},
+  {applicant: "Politechnika Wrocławska", status: "W trakcie", city: "Wrocław", date: "2024-07-17", coordinates: [51.1079, 17.0385]},
+  {applicant: "Straża Miejska Miasta Gdańsk", status: "Zakończone", city: "Gdańsk", date: "2025-06-22", coordinates: [54.3520, 18.6466]},
+  {applicant: "Urzad Miasta Kraków", status: "Zaplanowane", city: "Kraków", date: "2024-08-01", coordinates: [50.0647, 19.9450]},
+  {applicant: "Lubelski Urząd Wojewódzki", status: "Zaplanowane", city: "Lublin", date: "2024-08-10", coordinates: [51.2465, 22.5684]},  
+  {applicant: "Urząd Marszałkowski Województwa Wielkopolskiego", status: "Zaplanowane", city: "Poznań", date: "2025-08-05", coordinates: [52.4064, 16.9252]},
+  {applicant: "Śląski Urząd Wojewódzki", status: "W trakcie", city: "Katowice", date: "2024-02-05", coordinates: [50.2649, 19.0238]},
+  {applicant: "Powiatowy Urząd Pracy w Łodzi", status: "Zakończone", city: "Łódź", date: "2023-06-25", coordinates: [51.7592, 19.4550]},
+  {applicant: "Urząd Morski w Szczecinie", status: "W trakcie", city: "Szczecin", date: "2024-07-20", coordinates: [53.4285, 14.5528]},  
+]
 
 
 export default function page() {
@@ -69,6 +94,16 @@ export default function page() {
 
  
 
+  const handleCitySelect = (index: number) => {
+    if (selectedCityIndex === index) {
+      setSelectedCityIndex(null);
+      return;
+    }
+    setSelectedCityIndex(index);
+  }
+
+  const [selectedCityIndex, setSelectedCityIndex] = useState<number | null>(null);
+  
   return (
     <div className="space-y-8 p-4 max-w-4xl mx-auto">
       <Graph />
@@ -135,18 +170,34 @@ export default function page() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {[...Array(10).keys()].map((key) => (
-                <TableRow key={key}>
-                  <TableCell className="font-medium">INV001</TableCell>
-                  <TableCell>Paid</TableCell>
-                  <TableCell>Credit Card</TableCell>
-                  <TableCell className="text-right">$250.00</TableCell>
-                </TableRow>
+
+              {consultationList.map((consultation, index) => (
+              <TableRow key={index} onClick={() => handleCitySelect(index)} className={`bg-white hover:bg-gray-100 cursor-pointer ${selectedCityIndex===index ? 'bg-gray-200' : ''}`}>
+                <TableCell className="font-medium">{consultation.applicant}</TableCell>
+                <TableCell>{consultation.status}</TableCell>
+                <TableCell>{consultation.city}</TableCell>
+                <TableCell className="text-right">{consultation.date}</TableCell>
+              </TableRow>
               ))}
+              {/* {[...Array(10).keys()].map((key,index) => (
+              <TableRow key={key} onClick={() => handleCitySelect(index)} className={`bg-white hover:bg-gray-100 cursor-pointer ${selectedCityIndex===index ? 'bg-gray-200' : ''}`}>
+                <TableCell className="font-medium">INV001</TableCell>
+                <TableCell>Paid</TableCell>
+                <TableCell>Credit Card</TableCell>
+                <TableCell className="text-right">$250.00</TableCell>
+              </TableRow>
+              ))} */}
             </TableBody>
           </Table>
         </Background>
-        <Background>Mapa</Background>
+        <Background>
+          <div className='mb-4'>Mapa</div>
+          <div className='w-full flex justify-center'>
+            <Map 
+              markers={selectedCityIndex==null ? consultationList.map(c => c.coordinates) : [consultationList[selectedCityIndex].coordinates]} />
+          </div>
+        </Background>
+
       </div>
       <Separator />
       <h2 className="text-lg font-semibold">Osoby odpowiedzialne za ustawe</h2>
