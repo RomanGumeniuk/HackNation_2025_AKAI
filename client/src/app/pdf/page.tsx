@@ -35,7 +35,7 @@ const page = () => {
         const baseUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:8080";
         const uploadUrl = baseUrl.replace(/:\d+$/, ':3000');
         console.log('Upload URL:', uploadUrl + '/upload');
-        fetch(`${baseUrl}/upload`, {
+        fetch(`${window.location.host + ":8080/upload"}`, {
           method: "POST",
           body: formData,
         }).then((res) => {
