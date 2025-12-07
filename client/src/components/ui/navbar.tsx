@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { AccIcon } from "../accesibility/accIcon";
+import { Wcag } from "../accesibility/Wcag";
 
 export default function Navbar() {
   const routes = [
@@ -45,7 +45,7 @@ export default function Navbar() {
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#394788] group-hover:w-3/4 transition-all duration-300"></span>
               </Link>
             ))}
-            <AccIcon />
+            <Wcag />
           </nav>
         </div>
       </div>
