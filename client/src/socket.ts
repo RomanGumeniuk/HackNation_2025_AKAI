@@ -1,7 +1,7 @@
 "use client";
 import { io } from "socket.io-client";
 
-export type TTask = "title" | "summarize" | "answer" | "form";
+export type TTask = "title" | "summarize" | "answer" | "form" | "load" | "rate";
 
 export interface IAskBody {
   userId: string;
