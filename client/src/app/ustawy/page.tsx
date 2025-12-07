@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { 
+import {
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -37,7 +37,7 @@ export default function Ustawy() {
     const matchesSearch = ustawy.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = ustawy.category === category;
     const matchesTags = selectedTags.length === 0 || ustawy.tags.some((tag: any) => selectedTags.includes(tag.name));
-    
+
     return matchesSearch && matchesCategory && matchesTags;
   });
 
@@ -52,45 +52,40 @@ export default function Ustawy() {
 
   const allTags = Array.from(new Set(lawsData.flatMap((ustawy: any) => ustawy.tags.map((t: any) => t.name)))) as string[];
 
-  const filteredTagsForDisplay = allTags.filter(tag => 
+  const filteredTagsForDisplay = allTags.filter(tag =>
     tag.toLowerCase().includes(tagSearchQuery.toLowerCase())
   );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
-       
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-8 border-b border-gray-200">
           <div className="flex gap-4">
             <button
               onClick={() => setCategory('ustawy')}
-              className={`pb-4 px-4 font-semibold text-sm transition-colors ${
-                category === 'ustawy'
+              className={`pb-4 px-4 font-semibold text-sm transition-colors ${category === 'ustawy'
                   ? 'text-[#394788] border-b-2 border-[#394788]'
                   : 'text-gray-600 hover:text-gray-800'
-              }`}
+                }`}
             >
               Ustawy
             </button>
             <button
               onClick={() => setCategory('rozporzadzenia')}
-              className={`pb-4 px-4 font-semibold text-sm transition-colors ${
-                category === 'rozporzadzenia'
+              className={`pb-4 px-4 font-semibold text-sm transition-colors ${category === 'rozporzadzenia'
                   ? 'text-[394788] border-b-2 border-[394788]'
                   : 'text-gray-600 hover:text-gray-800'
-              }`}
+                }`}
             >
               Rozporządzenia
             </button>
             <button
               onClick={() => setCategory('inne')}
-              className={`pb-4 px-4 font-semibold text-sm transition-colors ${
-                category === 'inne'
+              className={`pb-4 px-4 font-semibold text-sm transition-colors ${category === 'inne'
                   ? 'text-indigo-700 border-b-2 border-indigo-700'
                   : 'text-gray-600 hover:text-gray-800'
-              }`}
+                }`}
             >
               Inne Akty
             </button>
@@ -123,8 +118,8 @@ export default function Ustawy() {
                   onChange={(e) => setTagSearchQuery(e.target.value)}
                   className="flex-1 bg-gray-200 text-sm"
                 />
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setTagSearchQuery('');
                     setSelectedTags([]);
@@ -158,23 +153,23 @@ export default function Ustawy() {
 
               <div className="flex flex-wrap gap-2">
                 {filteredTagsForDisplay.map((tag: string) => (
-              <Button
-                key={tag}
-                variant={selectedTags.includes(tag) ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => {
-                  if (selectedTags.includes(tag)) {
-                    setSelectedTags(selectedTags.filter((t) => t !== tag));
-                  } else {
-                    setSelectedTags([...selectedTags, tag]);
-                  }
-                }}
-                className="rounded-full"
-              >
-                {tag}
-              </Button>
-            ))}
-          </div>
+                  <Button
+                    key={tag}
+                    variant={selectedTags.includes(tag) ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => {
+                      if (selectedTags.includes(tag)) {
+                        setSelectedTags(selectedTags.filter((t) => t !== tag));
+                      } else {
+                        setSelectedTags([...selectedTags, tag]);
+                      }
+                    }}
+                    className="rounded-full"
+                  >
+                    {tag}
+                  </Button>
+                ))}
+              </div>
             </>
           )}
         </div>
@@ -227,7 +222,7 @@ export default function Ustawy() {
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
+                      <PaginationPrevious
                         href="#"
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                           e.preventDefault();
@@ -251,7 +246,7 @@ export default function Ustawy() {
                       </PaginationItem>
                     ))}
                     <PaginationItem>
-                      <PaginationNext 
+                      <PaginationNext
                         href="#"
                         onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                           e.preventDefault();
@@ -277,7 +272,7 @@ export default function Ustawy() {
           </div>
         )}
       </div>
-        
+
     </div>
   );
 }
