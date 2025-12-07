@@ -23,6 +23,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { lawsData } from '@/mock_data/laws';
+import { PopoverContent,Popover, PopoverTrigger } from '@/components/ui/popover';
+import LawsFilter, { FilterState } from '@/components/ustawy/LawsFilter';
 
 export default function Ustawy() {
   const [searchQuery, setSearchQuery] = useState('');
