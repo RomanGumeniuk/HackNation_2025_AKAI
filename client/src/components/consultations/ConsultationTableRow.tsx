@@ -63,17 +63,11 @@ export function ConsultationTableRow({ consultation }: { consultation: Consultat
         </Badge>
       </TableCell>
       <TableCell>
-        <div className="flex flex-wrap gap-1">
-          {consultation.tags.slice(0, 2).map((tag) => (
-            <Badge key={tag.name} variant={tag.variant} className="text-xs">
-              {tag.name}
-            </Badge>
-          ))}
-          {consultation.tags.length > 2 && (
-            <Badge variant="outline" className="text-xs">
-              +{consultation.tags.length - 2}
-            </Badge>
-          )}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-700">
+            {consultation.popularity.toLocaleString()}
+          </span>
+          <span className="text-xs text-gray-400">kliknięć</span>
         </div>
       </TableCell>
     </TableRow>
