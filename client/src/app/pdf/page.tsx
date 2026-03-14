@@ -1,7 +1,7 @@
 "use client";
 import Background from '@/components/details_page/Background'
 import { SocketContext } from "@/contexts/SocketContext";
-import { composeMessage } from "@/socket";
+import { backendUrl, composeMessage, isBackendConfigured } from "@/socket";
 import { Upload, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import {
@@ -52,8 +52,22 @@ const page = () => {
   };
 
   useEffect(() => {
+    if (!file) return;
+
+    if (!isBackendConfigured || !backendUrl) {
+      setTitle("Backend AI jest niedostepny");
+      setSummary("Ustaw NEXT_PUBLIC_BACKEND_URL w .env.local i uruchom aplikacje ponownie, aby wlaczyc analize PDF.");
+      setRating("");
+      setIsUploading(false);
+      setProgress(0);
+      return;
+    }
+
+    let isActive = true;
+    let onResponse: ((ev: any) => void) | null = null;
+
     async function setup() {
-      if (aiReady) return;
+      if (aiReady || !file) return;
       setIsUploading(true);
       setProgress(0);
       
@@ -70,12 +84,25 @@ const page = () => {
 
       const formData = new FormData();
       formData.set("file", new Blob([file as File]));
-      const upload = await fetch("http://146.59.16.213:8080/upload", {
-        method: "POST",
-        body: formData,
-      });
+      let upload: Response;
+      try {
+        upload = await fetch(`${backendUrl}/upload`, {
+          method: "POST",
+          body: formData,
+        });
+      } catch {
+        clearInterval(progressInterval);
+        if (!isActive) return;
+        setTitle("Nie udalo sie polaczyc z backendem");
+        setSummary("Sprawdz, czy serwer backend dziala i czy NEXT_PUBLIC_BACKEND_URL wskazuje poprawny adres.");
+        setRating("");
+        setIsUploading(false);
+        setProgress(0);
+        return;
+      }
 
       clearInterval(progressInterval);
+      if (!isActive) return;
       setProgress(50);
 
       const fileContnets = (await upload.json()).data;
@@ -85,13 +112,12 @@ const page = () => {
         composeMessage("load", fileContnets, undefined, true)
       );
 
-      socket.on("response", () => {
+      socket.once("response", () => {
+        if (!isActive) return;
         setProgress(70);
         setAiReady(true);
       });
     }
-
-    setup();
 
     if (file && aiReady) {
       setProgress(80);
@@ -102,7 +128,7 @@ const page = () => {
       let completedTasks = 0;
       const totalTasks = 3;
 
-      socket.on("response", (ev) => {
+      onResponse = (ev: any) => {
         switch (ev.task) {
           case "title":
             setTitle(ev.response.content);
@@ -127,9 +153,20 @@ const page = () => {
             setIsUploading(false);
           }, 300);
         }
-      });
+      };
+
+      socket.on("response", onResponse);
+    } else {
+      setup();
     }
-  }, [file, aiReady]);
+
+    return () => {
+      isActive = false;
+      if (onResponse) {
+        socket.off("response", onResponse);
+      }
+    };
+  }, [file, aiReady, socket]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + " B";

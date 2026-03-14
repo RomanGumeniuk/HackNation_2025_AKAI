@@ -13,6 +13,10 @@ export interface IAskBody {
   clearMemory: boolean;
 }
 
+export const backendUrl =
+  process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_SOCKET_URL;
+export const isBackendConfigured = Boolean(backendUrl);
+
 // Fallback UUID generator for environments where crypto.randomUUID is not available
 function generateUUID(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -44,6 +48,9 @@ export const composeMessage = (
   };
 };
 
-const socket = io("http://146.59.16.213:8080/");
+const socket = io(backendUrl, {
+  autoConnect: isBackendConfigured,
+  reconnectionAttempts: 3,
+});
 
 export default socket;
