@@ -27,8 +27,11 @@ Front‑end for a civic-tech prototype built with **Next.js 15** (App Router) an
       <p>Browse hottest and most recently updated Polish laws in real-time</p>
     </td>
     <td width="50%">
-      <h3>💬 AI-Powered Chat</h3>
-      <p>Ask questions about laws with integrated chatbot powered by Gemini</p>
+      <div align="center">
+        <h3>💬 AI-Powered Chat</h3>
+        <img src="./client/public/bot_gemini_cropped.png" alt="Gemini Chatbot" width="120">
+        <p>Ask questions about laws with integrated chatbot powered by Gemini</p>
+      </div>
     </td>
   </tr>
   <tr>
@@ -42,12 +45,14 @@ Front‑end for a civic-tech prototype built with **Next.js 15** (App Router) an
     </td>
   </tr>
   <tr>
-    <td>
+    <td align="center">
       <h3>📄 PDF Analysis</h3>
+      <img src="./client/public/file.svg" alt="Document" width="80">
       <p>Upload and analyze legislative documents with AI</p>
     </td>
-    <td>
+    <td align="center">
       <h3>🗺️ Interactive Maps</h3>
+      <img src="./client/public/globe.svg" alt="Globe Map" width="80">
       <p>Visualize legislation by region and location</p>
     </td>
   </tr>
@@ -174,6 +179,35 @@ The Socket.IO client reads this at runtime. Without this variable set, the app g
 
 ---
 
+## 🎨 Visual Tour
+
+### Homepage — Hottest & Recent Laws
+<div align="center">
+  <img src="./assets/MainPAge.png" alt="Homepage" width="100%" style="border-radius: 8px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
+
+### 📚 Laws Directory — Browse & Filter
+<div align="center">
+  <img src="./assets/UstawyPage.png" alt="Laws Directory" width="100%" style="border-radius: 8px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
+
+### 📄 AI Document Assistant — PDF Analysis
+<div align="center">
+  <img src="./assets/AsystentPage.png" alt="Document Assistant" width="100%" style="border-radius: 8px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
+
+### 📖 Education — Legislative Process Graph
+<div align="center">
+  <img src="./assets/EdukacjaPage.png" alt="Legislative Process" width="100%" style="border-radius: 8px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
+
+### 🔗 Footer — Resources & Partners
+<div align="center">
+  <img src="./assets/Footer.png" alt="Footer" width="100%" style="border-radius: 8px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
+
+---
+
 ## 📖 Routes & Pages
 
 | Route | Purpose | Features |
@@ -268,8 +302,12 @@ Ministry of Digitization collaboration
 
 **Made with ❤️ at HackNation 2025 (Bydgoszcz, December 6–7, 2025)**
 
+<img src="./client/public/Sejm_logo.svg" alt="Sejm Logo" width="100">
+<img src="./client/public/Logo_BIP_uproszczone.svg.png" alt="BIP Logo" width="100">
+
 *For more info: [hacknation.gov.pl](https://hacknation.gov.pl)*
 
-![Sejm Logo](./client/public/Sejm_logo.svg)
+**Built by AKAI Team** | Open for contributions
 
 </div>
+
